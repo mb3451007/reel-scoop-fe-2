@@ -1,0 +1,236 @@
+.container-fluid{
+  background: whitesmoke;
+}
+.homeContainer {
+    background: linear-gradient(
+      47deg,
+      rgba(107, 115, 245, 255) 89%,
+      rgb(249 249 249) 100%
+    );
+    height: auto;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    padding: 5rem 3rem 0rem 3rem;
+    color: white;
+  }
+  .backToword {
+    padding-bottom: 1rem;
+    button {
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+  
+      img {
+        width: 15px;
+        padding-bottom: 4px;
+      }
+    }
+  }
+  .somekedogg {
+    span {
+      font-size: 13px;
+      font-weight: 500;
+    }
+  }
+  .reelScoop {
+    padding-bottom: 1rem;
+    span {
+      font-size: 36px;
+      font-weight: 900;
+    }
+  }
+  .dateSep {
+    span {
+      font-size: 20px;
+      font-weight: 700;
+    }
+  }
+  .fishReport {
+    padding-top: 0.5rem;
+    button {
+      border: none;
+      padding: 7px 49px 7px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      background: #4141c8;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  }
+
+  .reports{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 2rem;
+    margin-bottom: -2rem;
+}
+.chart{
+    background: white;
+    color: black;
+    /* padding: 1rem 2rem; */
+    width: 12rem;
+    padding: 10px 0px 10px 30px;
+    box-shadow: 0px 0px 7px 0px;
+    border-radius: 10px;
+    margin-top: 5px;
+}
+.examan{
+    padding-top: 5px;
+    color: #a9a7a7;
+    font-size: 11px;
+}
+.chartReport{
+    font-weight: 700;
+}
+
+ 
+.speciesTitle{
+  display: flex;
+}
+.species{
+  background: #2D2D8C;
+  width: 150px;
+  text-align: center;
+  padding-top: 3px;
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
+  height: 150px;
+  border-radius: 0px 0px 100px 100px;
+  
+}
+.speciesContainer{
+  margin-top: 4rem;
+}
+.speciesData{
+width: 100%;
+  padding-left: 1rem;
+}
+
+
+.fishTitles{
+  width: 20%;
+  text-align: center;
+}
+.fishTitleContent{
+  background: #4141C8;
+  padding: 10px;
+  border-radius: 8px;
+}
+.fishTitleContentBox{
+  background: white;
+  color: #2D2D8C;
+  font-weight: 500;
+  padding: 0px 0px 0px 5px;
+    border-radius: 11px;
+    overflow: scroll;      /* Still allow scrolling */
+    scrollbar-width: none;
+}
+.fishamounts{
+  overflow: scroll;      /* Still allow scrolling */
+    scrollbar-width: none;
+}
+.weekDays{
+  background: #737DF5;
+  margin-top: 1rem;
+  padding: 15px;
+  justify-content: space-between;
+  color: white;
+  font-weight: 600;
+  border-radius: 6px;
+}
+.totalWeek{
+  background: #3C3C7D;
+  border-radius: 3px;
+  margin-top: -.9rem;
+  margin-bottom: -.9rem;
+  padding: 5px 15px;
+  margin-right: -.9rem;
+  color: white;
+  font-weight: 600;
+}
+.totalDays{
+  background: #E1E1F0;
+  border-radius: 3px;
+  margin-top: -1rem;
+  margin-bottom: -1rem;
+  padding: 5px 15px;
+  margin-right: -1rem;
+  color: 3C3C7D;
+  font-weight: 600;
+}
+.fishImgName{
+  background: #E1E1F0;
+  border-radius: 3px;
+  margin-top: -1rem;
+  margin-bottom: -1rem;
+  padding: 5px 15px;
+  margin-left: -1rem;
+  color: #3C3C7D;
+  font-weight: 600;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.addsByCompany
+{
+  margin-bottom: .5rem;
+  border: none;
+  border-radius: 10px;
+  padding: 1rem 0rem 1rem 4rem;
+  background: white;
+  font-size: 17px;
+  font-weight: 500;
+  }
+
+@media screen and (max-width:768px) {
+  .speciesTitle{
+    display: block !important;;
+  }
+  .species{
+    background: #2D2D8C;
+    width: 100%;
+    text-align: center;
+    padding-top: 3px;
+    color: white;
+    font-size: 24px;
+    font-weight: 600;
+    height: 50px;
+    margin: 1rem 0rem;
+    border-radius: 10px;
+    
+  }
+  .speciesData{
+    padding: 0rem;
+  }
+  .somekedoggRightSide{
+    margin-top: 1rem;
+  }
+ 
+}
