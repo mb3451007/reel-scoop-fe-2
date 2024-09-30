@@ -1,0 +1,23 @@
+<app-header></app-header>
+<div class="form-container">
+    <h2 class="form-title">Add Data</h2>
+    <form [formGroup]="addDataForm" action="" class="data-form">
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" id="location" formControlName="location" required>
+        </div>
+        <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input type="number" id="quantity" formControlName="quantity" required>
+        </div>
+        <div class="form-group">
+            <label for="species">Species</label>
+            <input type="text" id="species" formControlName="species" required>
+        </div>
+        <div class="form-group">
+            <label for="bait">Bait</label>
+            <input type="text" id="bait" formControlName="bait" required>
+        </div>
+        <button type="submit" class="submit-button" (click)="addData()">Submit</button>
+    </form>
+</div>
