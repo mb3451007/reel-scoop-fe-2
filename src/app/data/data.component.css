@@ -161,7 +161,7 @@ select[formControlName="filter"] {
 
 select {
     margin-right: auto; 
-    padding: 10px 15px;
+    padding: 10px 25px;
     border: 2px solid #6a67ce;
     border-radius: 8px;
     font-size: 16px;

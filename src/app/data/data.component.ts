@@ -38,11 +38,11 @@ export class DataComponent implements OnInit {
           this.toDate = endOfWeek.toISOString().split('T')[0];
           break;
   
-        case 'nextWeek':
-          const nextWeekStart = new Date(today.setDate(today.getDate() - today.getDay() + 7));
-          const nextWeekEnd = new Date(today.setDate(nextWeekStart.getDate() + 6));
-          this.fromDate = nextWeekStart.toISOString().split('T')[0];
-          this.toDate = nextWeekEnd.toISOString().split('T')[0];
+          case 'previousWeek': 
+          const previousWeekStart = new Date(today.setDate(today.getDate() - today.getDay() - 14));
+          const previousWeekEnd = new Date(today.setDate(previousWeekStart.getDate() + 6));
+          this.fromDate = previousWeekStart.toISOString().split('T')[0];
+          this.toDate = previousWeekEnd.toISOString().split('T')[0];
           break;
   
         case 'lastWeek':
