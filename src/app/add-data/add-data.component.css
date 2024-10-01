@@ -67,3 +67,39 @@ input[type="number"]:focus {
 .submit-button:hover {
     background-color: #5a57b3;
 }
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    background-color: white;
+    /* appearance: none;  */
+    /* -webkit-appearance: none;  */
+    /* -moz-appearance: none; */
+}
+
+select:focus {
+    border-color: #6a67ce;
+    outline: none;
+}
+
+
+.form-group select {
+    background: white url('data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTYgMTAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIxMCIgdmlld0JveD0iMCAwIDE2IDEwIiBmaWxsPSIjMDAwMDAwIj48cGF0aCBkPSJNMiAxTDggNkwxNCAxSCIvPjwvc3ZnPg==') no-repeat right 10px center;
+    background-size: 12px;
+}
+
+
+select {
+    color: #555;
+}
+
+select option {
+    color: #333;
+}
+option{
+    overflow: scroll;
+    height: 100px;
+}

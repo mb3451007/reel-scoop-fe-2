@@ -12,6 +12,9 @@ export class DataService {
   getData(page:any,userId:any,fromDate:string,toDate:string) {
     return this.http.get<any>(`${this.baseUrl}/getData/${page}?userId=${userId}&fromDate=${fromDate}&toDate=${toDate}`);
   }
+  getAllData(fromDate:string,toDate:string) {
+    return this.http.get<any>(`${this.baseUrl}/getAllData/?fromDate=${fromDate}&toDate=${toDate}`);
+  }
   addData(data:any) {
     return this.http.post<any>(`${this.baseUrl}/addData`, data);
   }

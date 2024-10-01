@@ -142,5 +142,7 @@ form input:focus {
   border-color: #555; 
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); 
 }
-
-
+select option{
+  height: 50px;
+  overflow-y: auto;
+}
