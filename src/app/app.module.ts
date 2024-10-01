@@ -9,6 +9,7 @@ import { DataComponent } from './data/data.component';
 import { AddDataComponent } from './add-data/add-data.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     AuthComponent,
     HeaderComponent,
     DataComponent,
-    AddDataComponent
+    AddDataComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
