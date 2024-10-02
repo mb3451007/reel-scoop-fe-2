@@ -7,8 +7,15 @@
     </div>
     <div class="col-12 somekedogg"><span>SMOKEDOGG</span></div>
     <div class="col-12 reelScoop"><span>The Reel Scoop</span></div>
-    <div class="col-12 dateSep"><span>September 23, 2024</span></div>
-    <div class="col-12 fishReport"> <button>Fish Report Archives</button>
+    <div class="col-12 dateSep"><span>{{fromDate | date:'MMMM d,y' }}-{{toDate | date:'MMMM d,y'}}</span></div>
+    <div class="col-12 fishReport"> 
+        <!-- <button>Fish Report Archives</button> -->
+        <select (change)="onDateRangeChange($event)">
+            <option [value]="'thisWeek'" selected>This Week</option>
+            <option [value]="'lastWeek'">Last Week</option>
+            <option [value]="'twoWeeksAgo'">2 Weeks Ago</option>
+            <option [value]="'threeWeeksAgo'">3 Weeks Ago</option>
+          </select>
     </div>
 
     <div class="col-12 reports">
@@ -46,8 +53,21 @@
 
             <div class="speciesData ">
                <div class="fishTitleContent" >
-                 <div class="d-flex fishTitleContentBox" > <span class="fishTitles" *ngFor="let fish of fishes">{{fish}}</span> </div>
-               <div class="d-flex fishamounts" ><span class="fishTitles text-white" *ngFor="let fishAmount of fishesAmount">{{fishAmount}}</span></div>
+                 <div class="d-flex fishTitleContentBox" > 
+                    <span class="fishTitles">TOTAL FISH</span> 
+                    <span class="fishTitles">CHARTERS</span> 
+                    <span class="fishTitles">ANGLER</span> 
+                    <span class="fishTitles">FISH/CHARTER</span> 
+                    <span class="fishTitles">FISH/ANGLER</span> 
+                </div>
+               <div class="d-flex fishamounts" >
+                <span class="fishTitles text-white" >{{totalFishCount}}</span>
+                <span class="fishTitles text-white" >{{charterFishCount}}</span>
+                <span class="fishTitles text-white" >{{anglerFishCount}}</span>
+                <span class="fishTitles text-white" >{{fish_Charter}}</span>
+                <span class="fishTitles text-white" >{{fish_Angler}}</span>
+               
+            </div>
             </div>
                <div class="d-flex weekDays" >
                 <span  *ngFor="let week of weeks">{{week}}</span> 
@@ -59,41 +79,8 @@
             <div class="d-flex weekDays" >
                 <span class="fishImgName">fish-img <br> TUNA</span>
                 <span  *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> 
-                <span class="totalDays">1298</span>
+                <span class="totalDays">{{fullWeekCount}}</span>
             </div>  
-
-            <div class="d-flex weekDays" >
-                <span class="fishImgName">fish-img <br> TUNA</span>
-                <span  *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> 
-                <span class="totalDays">1298</span>
-            </div> 
-
-            <div class="d-flex weekDays" >
-                <span class="fishImgName">fish-img <br> TUNA</span>
-                <span  *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> 
-                <span class="totalDays">1298</span>
-            </div> 
-
-
-            <div class="d-flex weekDays" >
-                <span class="fishImgName">fish-img <br> TUNA</span>
-                <span  *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> 
-                <span class="totalDays">1298</span>
-            </div> 
-
-
-            <div class="d-flex weekDays" >
-                <span class="fishImgName">fish-img <br> TUNA</span>
-                <span  *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> 
-                <span class="totalDays">1298</span>
-            </div> 
-
-
-            <div class="d-flex weekDays" >
-                <span class="fishImgName">fish-img <br> TUNA</span>
-                <span  *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> 
-                <span class="totalDays">1298</span>
-            </div> 
     </div>
     
     <div class="col-md-4 col-lg-3 somekedoggRightSide">

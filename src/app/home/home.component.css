@@ -156,10 +156,11 @@ width: 100%;
   border-radius: 3px;
   margin-top: -1rem;
   margin-bottom: -1rem;
-  padding: 5px 15px;
+  padding: 15px 15px;
   margin-right: -1rem;
-  color: 3C3C7D;
+  color: #3C3C7D;
   font-weight: 600;
+  
 }
 .fishImgName{
   background: #E1E1F0;
@@ -171,32 +172,6 @@ width: 100%;
   color: #3C3C7D;
   font-weight: 600;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .addsByCompany
 {
@@ -233,4 +208,73 @@ width: 100%;
     margin-top: 1rem;
   }
  
+}
+
+select[formControlName="filter"] {
+  padding: 10px 15px;
+  border: 2px solid #6a67ce;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: #f9f9f9;
+  color: #333;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 20 20"><polygon fill="%236a67ce" points="0,0 20,0 10,15"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+select[formControlName="filter"]:hover {
+  border-color: #4c48a4;
+  box-shadow: 0 0 8px rgba(76, 72, 164, 0.3);
+}
+
+select[formControlName="filter"]:focus {
+  outline: none;
+  border-color: #4c48a4;
+  box-shadow: 0 0 8px rgba(76, 72, 164, 0.5);
+}
+
+option {
+  padding: 10px;
+  background-color: #ffffff;
+  color: #333;
+}
+.table-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.select-and-button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+select {
+  margin-right: auto; 
+  padding: 10px 25px;
+  border: 2px solid #6a67ce;
+  font-size: 16px;
+  background-color: #f9f9f9;
+  color: #333;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 20 20"><polygon fill="%236a67ce" points="0,0 20,0 10,15"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0px 0px 7px 0px;
+  border-radius: 10px;
+}
+
+.button-container {
+  margin-left: auto; /* Align button to the right */
 }

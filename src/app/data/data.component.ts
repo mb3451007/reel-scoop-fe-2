@@ -28,35 +28,52 @@ export class DataComponent implements OnInit {
     this.getData(); 
   }
     
-   setDateRange(range: string): void {
-      const today = new Date();
-      switch (range) {
-        case 'thisWeek':
-          const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
-          const endOfWeek = new Date(today.setDate(startOfWeek.getDate() + 6));
-          this.fromDate = startOfWeek.toISOString().split('T')[0];
-          this.toDate = endOfWeek.toISOString().split('T')[0];
-          break;
+  setDateRange(range: string): void {
+    const today = new Date();
+    let startOfWeek, endOfWeek;
   
-          case 'previousWeek': 
-          const previousWeekStart = new Date(today.setDate(today.getDate() - today.getDay() - 14));
-          const previousWeekEnd = new Date(today.setDate(previousWeekStart.getDate() + 6));
-          this.fromDate = previousWeekStart.toISOString().split('T')[0];
-          this.toDate = previousWeekEnd.toISOString().split('T')[0];
-          break;
+    switch (range) {
+      case 'thisWeek':
+        startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - today.getDay());
+        endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        this.fromDate = startOfWeek.toISOString().split('T')[0];
+        this.toDate = endOfWeek.toISOString().split('T')[0];
+        break;
   
-        case 'lastWeek':
-          const lastWeekStart = new Date(today.setDate(today.getDate() - today.getDay() - 7));
-          const lastWeekEnd = new Date(today.setDate(lastWeekStart.getDate() + 6));
-          this.fromDate = lastWeekStart.toISOString().split('T')[0];
-          this.toDate = lastWeekEnd.toISOString().split('T')[0];
-          break;
+      case 'lastWeek':
+        startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - today.getDay() - 7);
+        endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        this.fromDate = startOfWeek.toISOString().split('T')[0];
+        this.toDate = endOfWeek.toISOString().split('T')[0];
+        break;
   
-        default:
-          this.fromDate = '';
-          this.toDate = '';
-      }
+      case 'twoWeeksAgo':
+        startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - today.getDay() - 14);
+        endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        this.fromDate = startOfWeek.toISOString().split('T')[0];
+        this.toDate = endOfWeek.toISOString().split('T')[0];
+        break;
+  
+      case 'threeWeeksAgo':
+        startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - today.getDay() - 21);
+        endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        this.fromDate = startOfWeek.toISOString().split('T')[0];
+        this.toDate = endOfWeek.toISOString().split('T')[0];
+        break;
+  
+      default:
+        this.fromDate = '';
+        this.toDate = '';
     }
+  }
   addData() {
     this.router.navigate(['/add-data']);
   }

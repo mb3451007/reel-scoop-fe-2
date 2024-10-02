@@ -5,7 +5,8 @@
     <select (change)="onDateRangeChange($event)">
       <option [value]="'thisWeek'" selected>This Week</option>
       <option [value]="'lastWeek'">Last Week</option>
-      <option [value]="'previousWeek'">Previous Week</option>
+      <option [value]="'twoWeeksAgo'">2 Weeks Ago</option>
+      <option [value]="'threeWeeksAgo'">3 Weeks Ago</option>
     </select>
     <div class="button-container">
       <button class="btn btn-success add-data-button" (click)="addData()">Add New Data</button>
