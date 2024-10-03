@@ -57,6 +57,8 @@ export class HomeComponent implements OnInit {
 
     this.dataService.getAllData(this.fromDate, this.toDate).subscribe({
       next: (response: any) => {
+        console.log(response);
+        
         if (response.data && Array.isArray(response.data)) {
           for (let i = 0; i < response.data.length; i++) {
             const userDetail = response.data[i].userDetails;
