@@ -7,66 +7,53 @@ import { DataService } from '../data.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  weeks: string[] = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']
+  weeks: string[] = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+
+  fishTypes = [
+    'Yellowfin Tuna', 'Dorado', 'Sailfish', 'Striped Marlin', 
+    'Blue Marlin', 'Black Marlin', 'Wahoo', 'Yellowtail', 
+    'Roosterfish', 'Pargo', 'Cabrilla', 'Triggerfish', 'Hauchinango', 'Others'
+  ];
 
   dailyFishCount: { [key: string]: number } = {
-    mondayData: 0,
-    tuesdayData: 0,
-    wednesdayData: 0,
-    thursdayData: 0,
-    fridayData: 0,
-    saturdayData: 0,
-    sundayData: 0
-  }
-  // Separate objects for each day's data
-  mondayData: any[] = [];
-  tuesdayData: any[] = [];
-  wednesdayData: any[] = [];
-  thursdayData: any[] = [];
-  fridayData: any[] = [];
-  saturdayData: any[] = [];
-  sundayData: any[] = [];
+    mondayData: 0, tuesdayData: 0, wednesdayData: 0, thursdayData: 0,
+    fridayData: 0, saturdayData: 0, sundayData: 0
+  };
 
-  totalPerDayFishes: number[] = [0, 0, 0, 0, 0, 0, 0]
+  fishCounts: { [key: string]: { [key: string]: number } } = {};
+
+  dayData: { [key: string]: any[] } = {
+    mondayData: [], tuesdayData: [], wednesdayData: [], 
+    thursdayData: [], fridayData: [], saturdayData: [], sundayData: []
+  };
+
+  totalPerDayFishes: number[] = [0, 0, 0, 0, 0, 0, 0];
   fromDate: string = '';
   toDate: string = '';
-  charterFishCount: number = 0
-  anglerFishCount: number = 0
-  fish_Charter: number = 0
-  fish_Angler: number = 0
-  totalFishCount: number = 0
-  fullWeekCount: number = 0
-  constructor(private dataService: DataService) { }
+  charterFishCount: number = 0;
+  anglerFishCount: number = 0;
+  fish_Charter: number = 0;
+  fish_Angler: number = 0;
+  totalFishCount: number = 0;
+  fullWeekCount: number = 0;
+
+  constructor(private dataService: DataService) {
+  
+    this.fishTypes.forEach(fish => {
+      this.fishCounts[fish] = {
+        mondayData: 0, tuesdayData: 0, wednesdayData: 0, thursdayData: 0,
+        fridayData: 0, saturdayData: 0, sundayData: 0
+      };
+    });
+  }
 
   ngOnInit(): void {
-    this.getAllData()
-    this.setDateRange("thisWeek")
+    this.getAllData();
+    this.setDateRange('thisWeek');
   }
+
   getAllData() {
-    this.charterFishCount = 0
-    this.anglerFishCount = 0
-    this.fish_Charter = 0
-    this.fish_Angler = 0
-    this.totalFishCount = 0
-
-    // Reset daily fish count
-    this.mondayData = [];
-    this.tuesdayData = [];
-    this.wednesdayData = [];
-    this.thursdayData = [];
-    this.fridayData = [];
-    this.saturdayData = [];
-    this.sundayData = [];
-
-    this.dailyFishCount = {
-      mondayData: 0,
-      tuesdayData: 0,
-      wednesdayData: 0,
-      thursdayData: 0,
-      fridayData: 0,
-      saturdayData: 0,
-      sundayData: 0
-    };
+    this.resetData();
 
     this.dataService.getAllData(this.fromDate, this.toDate).subscribe({
       next: (response: any) => {
@@ -74,40 +61,21 @@ export class HomeComponent implements OnInit {
           for (let i = 0; i < response.data.length; i++) {
             const userDetail = response.data[i].userDetails;
             const createdDate = new Date(response.data[i].created_at);
-            this.fullWeekCount = response.data.length
-            const dayOfWeek = createdDate.toLocaleString('en-US', { weekday: 'short' }).toUpperCase();
-            
+            const fishType = response.data[i].species;
+            this.fullWeekCount = response.data.length;
 
-            switch (dayOfWeek) {
-              case 'MON':
-                this.mondayData.push(response.data[i]);
-                this.dailyFishCount['mondayData']++;
-                break;
-              case 'TUE':
-                this.tuesdayData.push(response.data[i]);
-                this.dailyFishCount['tuesdayData']++;
-                break;
-              case 'WED':
-                this.wednesdayData.push(response.data[i]);
-                this.dailyFishCount['wednesdayData']++;
-                break;
-              case 'THU':
-                this.thursdayData.push(response.data[i]);
-                this.dailyFishCount['thursdayData']++;
-                break;
-              case 'FRI':
-                this.fridayData.push(response.data[i]);
-                this.dailyFishCount['fridayData']++;
-                break;
-              case 'SAT':
-                this.saturdayData.push(response.data[i]);
-                this.dailyFishCount['saturdayData']++;
-                break;
-              case 'SUN':
-                this.sundayData.push(response.data[i]);
-                this.dailyFishCount['sundayData']++;
-                break;
+            const dayOfWeek = createdDate.toLocaleString('en-US', { weekday: 'short' }).toUpperCase();
+            const dayKey = this.getDayKey(dayOfWeek);
+            
+            if (dayKey) {
+              this.dayData[dayKey].push(response.data[i]);
+              this.dailyFishCount[dayKey]++;
+
+              if (this.fishCounts[fishType]) {
+                this.fishCounts[fishType][dayKey]++;
+              }
             }
+
             if (userDetail) {
               const userType = userDetail.user_type;
               if (userType === 'Fish/Charter') {
@@ -125,24 +93,80 @@ export class HomeComponent implements OnInit {
               }
             }
           }
-        }    
-        this.calculateWeekDays()
-
+        }
+        this.calculateWeekDays();
+        this.getAllFishDataPerDay(); 
+        console.log('Fish Data:', response);
+        console.log('Fish Data:', response);
       },
       error: (error: any) => {
         console.log(error);
       }
     });
+  }getAllFishDataPerDay() {
+
+    const allSpecies = new Set<string>();
+    
+    Object.keys(this.dayData).forEach(dayKey => {
+      this.dayData[dayKey].forEach(data => {
+        allSpecies.add(data.species);
+      });
+    });
+  
+    allSpecies.forEach(species => {
+      console.log(`Data for ${species}:`);
+      Object.keys(this.dayData).forEach(dayKey => {
+        const fishData = this.dayData[dayKey].filter(data => data.species === species);
+        console.log(`  ${dayKey}:`, fishData);
+      });
+    });
   }
- calculateWeekDays(){
-  this.totalPerDayFishes[0] = this.dailyFishCount['mondayData']; 
-  this.totalPerDayFishes[1] = this.totalPerDayFishes[0] + this.dailyFishCount['tuesdayData']; 
-  this.totalPerDayFishes[2] = this.totalPerDayFishes[1] + this.dailyFishCount['wednesdayData']; 
-  this.totalPerDayFishes[3] = this.totalPerDayFishes[2] + this.dailyFishCount['thursdayData']; 
-  this.totalPerDayFishes[4] = this.totalPerDayFishes[3] + this.dailyFishCount['fridayData']; 
-  this.totalPerDayFishes[5] = this.totalPerDayFishes[4] + this.dailyFishCount['saturdayData']; 
-  this.totalPerDayFishes[6] = this.totalPerDayFishes[5] + this.dailyFishCount['sundayData'];
- }
+  
+  resetData() {
+    this.charterFishCount = 0;
+    this.anglerFishCount = 0;
+    this.fish_Charter = 0;
+    this.fish_Angler = 0;
+    this.totalFishCount = 0;
+
+
+    Object.keys(this.dayData).forEach(day => {
+      this.dayData[day] = [];
+    });
+
+    Object.keys(this.dailyFishCount).forEach(day => {
+      this.dailyFishCount[day] = 0;
+    });
+
+    this.fishTypes.forEach(fish => {
+      Object.keys(this.fishCounts[fish]).forEach(day => {
+        this.fishCounts[fish][day] = 0;
+      });
+    });
+  }
+
+  getDayKey(dayOfWeek: string): string | null {
+    switch (dayOfWeek) {
+      case 'MON': return 'mondayData';
+      case 'TUE': return 'tuesdayData';
+      case 'WED': return 'wednesdayData';
+      case 'THU': return 'thursdayData';
+      case 'FRI': return 'fridayData';
+      case 'SAT': return 'saturdayData';
+      case 'SUN': return 'sundayData';
+      default: return null;
+    }
+  }
+
+  calculateWeekDays() {
+    this.totalPerDayFishes[0] = this.dailyFishCount['mondayData'];
+    for (let i = 1; i < this.weeks.length; i++) {
+      const dayKey = this.getDayKey(this.weeks[i]);
+      if (dayKey) {
+        this.totalPerDayFishes[i] = this.totalPerDayFishes[i - 1] + this.dailyFishCount[dayKey];
+      }
+    }
+  }
 
   onDateRangeChange(event: any): void {
     const selectedValue = event.target.value;
@@ -151,50 +175,37 @@ export class HomeComponent implements OnInit {
   }
 
   setDateRange(range: string): void {
+    let startOfWeek: Date = new Date();  
+    let endOfWeek: Date = new Date();  
     const today = new Date();
-    let startOfWeek, endOfWeek;
-
     switch (range) {
       case 'thisWeek':
         startOfWeek = new Date(today);
         startOfWeek.setDate(today.getDate() - today.getDay());
         endOfWeek = new Date(startOfWeek);
         endOfWeek.setDate(startOfWeek.getDate() + 6);
-        this.fromDate = startOfWeek.toISOString().split('T')[0];
-        this.toDate = endOfWeek.toISOString().split('T')[0];
         break;
-
       case 'lastWeek':
         startOfWeek = new Date(today);
         startOfWeek.setDate(today.getDate() - today.getDay() - 7);
         endOfWeek = new Date(startOfWeek);
         endOfWeek.setDate(startOfWeek.getDate() + 6);
-        this.fromDate = startOfWeek.toISOString().split('T')[0];
-        this.toDate = endOfWeek.toISOString().split('T')[0];
         break;
-
       case 'twoWeeksAgo':
         startOfWeek = new Date(today);
         startOfWeek.setDate(today.getDate() - today.getDay() - 14);
         endOfWeek = new Date(startOfWeek);
         endOfWeek.setDate(startOfWeek.getDate() + 6);
-        this.fromDate = startOfWeek.toISOString().split('T')[0];
-        this.toDate = endOfWeek.toISOString().split('T')[0];
         break;
-
       case 'threeWeeksAgo':
         startOfWeek = new Date(today);
         startOfWeek.setDate(today.getDate() - today.getDay() - 21);
         endOfWeek = new Date(startOfWeek);
         endOfWeek.setDate(startOfWeek.getDate() + 6);
-        this.fromDate = startOfWeek.toISOString().split('T')[0];
-        this.toDate = endOfWeek.toISOString().split('T')[0];
         break;
-
-      default:
-        this.fromDate = '';
-        this.toDate = '';
     }
-  }
 
+    this.fromDate = startOfWeek.toISOString().split('T')[0];
+    this.toDate = endOfWeek.toISOString().split('T')[0];
+  }
 }
