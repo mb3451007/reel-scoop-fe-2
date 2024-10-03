@@ -7,8 +7,9 @@ import { DataService } from '../data.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  
   weeks: string[] = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']
-
+ 
   dailyFishCount: { [key: string]: number } = {
     mondayData: 0,
     tuesdayData: 0,
@@ -70,6 +71,8 @@ export class HomeComponent implements OnInit {
 
     this.dataService.getAllData(this.fromDate, this.toDate).subscribe({
       next: (response: any) => {
+        console.log(response);
+        
         if (response.data && Array.isArray(response.data)) {
           for (let i = 0; i < response.data.length; i++) {
             const userDetail = response.data[i].userDetails;
@@ -81,18 +84,23 @@ export class HomeComponent implements OnInit {
             switch (dayOfWeek) {
               case 'MON':
                 this.mondayData.push(response.data[i]);
+                
                 this.dailyFishCount['mondayData']++;
                 break;
               case 'TUE':
                 this.tuesdayData.push(response.data[i]);
+                
                 this.dailyFishCount['tuesdayData']++;
                 break;
               case 'WED':
                 this.wednesdayData.push(response.data[i]);
+                
                 this.dailyFishCount['wednesdayData']++;
                 break;
               case 'THU':
                 this.thursdayData.push(response.data[i]);
+                 
+
                 this.dailyFishCount['thursdayData']++;
                 break;
               case 'FRI':
@@ -125,7 +133,8 @@ export class HomeComponent implements OnInit {
               }
             }
           }
-        }    
+         
+console.log( this.wednesdayData,"Wednesday Data")        }    
         this.calculateWeekDays()
 
       },
@@ -136,6 +145,7 @@ export class HomeComponent implements OnInit {
   }
  calculateWeekDays(){
   this.totalPerDayFishes[0] = this.dailyFishCount['mondayData']; 
+  
   this.totalPerDayFishes[1] = this.totalPerDayFishes[0] + this.dailyFishCount['tuesdayData']; 
   this.totalPerDayFishes[2] = this.totalPerDayFishes[1] + this.dailyFishCount['wednesdayData']; 
   this.totalPerDayFishes[3] = this.totalPerDayFishes[2] + this.dailyFishCount['thursdayData']; 
