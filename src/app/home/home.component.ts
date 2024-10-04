@@ -7,6 +7,7 @@ import { DataService } from '../data.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  weeklyFishTotals: { [fishType: string]: number } = {};
   weeks: string[] = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
   fishTypes = [
@@ -43,6 +44,24 @@ export class HomeComponent implements OnInit {
   Triggerfish: number[] = [];
   Hauchinango: number[] = [];
   Others: number[] = [];
+
+
+
+  YellowfinTunaCumulative: number[] = [];
+  DoradoCumulative: number[] = [];
+  SailfishCumulative: number[] = [];
+  StripedMarlinCumulative: number[] = [];
+  BlueMarlinCumulative: number[] = [];
+  BlackMarlinCumulative: number[] = [];
+  WahooCumulative: number[] = [];
+  yellowtailCumulative: number[] = [];
+  RoosterfishCumulative: number[] = [];
+  PargoCumulative: number[] = [];
+  CabrillaCumulative: number[] = [];
+  TriggerfishCumulative: number[] = [];
+  HauchinangoCumulative: number[] = [];
+  OthersCumulative: number[] = [];
+
 
   totalPerDayFishes: number[] = [0, 0, 0, 0, 0, 0, 0];
   fromDate: string = '';
@@ -227,27 +246,6 @@ export class HomeComponent implements OnInit {
     }
   }
   initializeFishData() {
-    // Example data for different fish species
-    this.fishDataList = [
-        {
-            name: 'Yellowfin Tuna',
-            dailyCounts: [5, 10, 3, 0, 2, 1, 4],
-            totalCount: 0 // Will be calculated
-        },
-        {
-            name: 'Dorado',
-            dailyCounts: [2, 5, 0, 1, 0, 3, 2],
-            totalCount: 0
-        },
-        {
-            name: 'Sailfish',
-            dailyCounts: [0, 1, 2, 3, 1, 0, 0],
-            totalCount: 0
-        },
-        // Add other fish species here
-    ];
-
-    // Calculate total count for each fish
     this.fishDataList.forEach(fish => {
         fish.totalCount = fish.dailyCounts.reduce((a:any, b:any) => a + b, 0);
     });
@@ -267,6 +265,7 @@ getAllFishDataPerDay() {
       if (this.fishDailyCounts[fishType] && dayIndex !== -1) {
         this.fishDailyCounts[fishType][dayIndex]++;
       }
+      this.weeklyFishTotals = this.getWeeklyFishTotals();
     });
   });
    // Assign the counts for fish species
@@ -287,6 +286,20 @@ getAllFishDataPerDay() {
 
     
   
+    this.YellowfinTunaCumulative = this.calculateCumulative(this.YellowfinTuna);
+    this.DoradoCumulative = this.calculateCumulative(this.Dorado);
+    this.SailfishCumulative = this.calculateCumulative(this.Sailfish);
+    this.StripedMarlinCumulative = this.calculateCumulative(this.StripedMarlin);
+    this.BlueMarlinCumulative = this.calculateCumulative(this.BlueMarlin);
+    this.BlackMarlinCumulative = this.calculateCumulative(this.BlackMarlin);
+    this.WahooCumulative = this.calculateCumulative(this.Wahoo);
+    this.yellowtailCumulative = this.calculateCumulative(this.yellowtail);
+    this.RoosterfishCumulative = this.calculateCumulative(this.Roosterfish);
+    this.PargoCumulative = this.calculateCumulative(this.Pargo);
+    this.CabrillaCumulative = this.calculateCumulative(this.Cabrilla);
+    this.TriggerfishCumulative = this.calculateCumulative(this.Triggerfish);
+    this.HauchinangoCumulative = this.calculateCumulative(this.Hauchinango);
+    this.OthersCumulative = this.calculateCumulative(this.Others);
 
   // Logging the data per fish type per day
   Object.keys(this.fishDailyCounts).forEach(fishType => {
@@ -305,4 +318,27 @@ getDayIndex(dayKey: string): number {
     default: return -1;
   }
 }
+// Add this method in your HomeComponent class
+calculateCumulative(counts: number[]): number[] {
+  let cumulative = 0;
+  return counts.map(count => cumulative += count);
+}
+getWeeklyFishTotals() {
+  const weeklyTotals: { [fishType: string]: number } = {};
+
+  this.fishTypes.forEach(fishType => {
+    const dailyCounts = this.fishDailyCounts[fishType];  // Get daily counts array
+    
+    // Check if the daily counts are correctly populated
+    console.log(`${fishType} daily counts:`, dailyCounts);
+
+    const totalForWeek = dailyCounts.reduce((acc, count) => acc + count, 0);  // Sum up the counts
+    weeklyTotals[fishType] = totalForWeek;  // Store total in an object
+  });
+
+  console.log('Weekly Totals:', weeklyTotals);
+  return weeklyTotals;
+}
+
+
 }
