@@ -104,11 +104,15 @@
                     <img id="Hauchinango" src="assets/fish/yellowfin_tuna-removebg-preview.png" alt="">
                    <p> Yellowfin Tuna</p>
                 </span>
+
                 <div class="fishList">
-                    <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span>
+                    <!-- <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> -->
+                <span class="perdayfisheslist" *ngFor="let perDaysFishes of YellowfinTuna">{{perDaysFishes}}</span> 
+
                 </div> 
+
                 <span class="totalDays">
-                    <span class="countfish">{{fullWeekCount}}</span>
+                    <span class="countfish">{{ weeklyFishTotals['Yellowfin Tuna']}}</span>
                 </span>
             </div>  
 
@@ -117,11 +121,17 @@
                     <img id="Hauchinango" src="assets/fish/dorado-removebg-preview.png" alt="">
                     <p>Dorado</p>
                     </span>
+
                     <div class="fishList">
-                <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> 
+                <!-- <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span>  -->
+                 
+                <span class="perdayfisheslist" *ngFor="let perDaysFishes of Dorado">{{perDaysFishes}}
+                    
+                </span> 
             </div>
+
                 <span class="totalDays">
-                    <span class="countfish">{{fullWeekCount}}</span>
+                    <span class="countfish">{{ weeklyFishTotals['Dorado']}}</span>
                 </span>
             </div> 
 
@@ -130,11 +140,15 @@
                     <img id="Hauchinango" src="assets/fish/sailfish_2-removebg-preview.png" alt="">
                     <p>Sailfish</p>
                 </span>
+
                 <div class="fishList">
-                <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> 
+                <!-- <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span>  -->
+                <span class="perdayfisheslist" *ngFor="let perDaysFishes of Sailfish">{{perDaysFishes}}</span> 
+                
                 </div>
+
                 <span class="totalDays">
-                    <span class="countfish">{{fullWeekCount}}</span>
+                    <span class="countfish">{{ weeklyFishTotals['Sailfish']}}</span>
                 </span>
             </div> 
 
@@ -143,12 +157,15 @@
                     <img id="Hauchinango" src="assets/fish/striped_marlin-removebg-preview.png" alt="">
                    <p> Striped Marlin</p>
                 </span>
+
                 <div class="fishList">
-                <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> 
+                <!-- <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span>  -->
+                 
+                <span class="perdayfisheslist" *ngFor="let perDaysFishes of StripedMarlin">{{perDaysFishes}}</span> 
                 </div>
+
                 <span class="totalDays">
-                    <span class="countfish">{{fullWeekCount}}</span>
-                </span>
+                    <span class="countfish">{{ weeklyFishTotals['Striped Marlin']}}</span>                </span>
             </div> 
 
             <div class="d-flex perDayWeek" >
@@ -156,11 +173,15 @@
                     <img id="Hauchinango" src="assets/fish/blue_marlin-removebg-preview.png" alt="">
                     <p>Blue Marlin</p>
                 </span>
+
                 <div class="fishList">
-                <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> 
+                <!-- <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span>  -->
+                 
+                <span class="perdayfisheslist" *ngFor="let perDaysFishes of BlueMarlin">{{perDaysFishes}}</span> 
                 </div>
+
                 <span class="totalDays">
-                    <span class="countfish">{{fullWeekCount}}</span>
+                    <span class="countfish">{{ weeklyFishTotals['Blue Marlin']}}</span>  
                 </span>
             </div> 
 
@@ -169,11 +190,15 @@
                     <img id="Hauchinango" src="assets/fish/Black_Marlin-removebg-preview.png" alt="">
                    <p> Black Marlin</p>
                 </span>
+
                 <div class="fishList">
-                <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> 
+                <!-- <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span>  -->
+                <span class="perdayfisheslist" *ngFor="let perDaysFishes of BlackMarlin">{{perDaysFishes}}</span> 
                 </div>
+
+               
                 <span class="totalDays">
-                    <span class="countfish">{{fullWeekCount}}</span>
+                    <span class="countfish">{{ weeklyFishTotals['Black Marlin']}}</span>  
                 </span>
             </div> 
 
@@ -183,11 +208,15 @@
                     <img id="Hauchinango" src="assets/fish/wahoo_2-removebg-preview.png" alt="">
                     <p>Wahoo</p>
                 </span>
+
                 <div class="fishList">
-                <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> 
+                <!-- <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span>  -->
+                <span class="perdayfisheslist" *ngFor="let perDaysFishes of Wahoo">{{perDaysFishes}}</span> 
                 </div>
+
+              
                 <span class="totalDays">
-                    <span class="countfish">{{fullWeekCount}}</span>
+                    <span class="countfish">{{ weeklyFishTotals['Wahoo']}}</span>  
                 </span>
             </div> 
 
@@ -197,11 +226,15 @@
                     <img id="Hauchinango" src="assets/fish/yellowtail-removebg-preview.png" alt="">
                     <p>Yellowtail</p>
                 </span>
+
                 <div class="fishList">
-                <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> 
+                <!-- <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span>  -->
+                <span class="perdayfisheslist" *ngFor="let perDaysFishes of yellowtail">{{perDaysFishes}}</span> 
                 </div>
+
+               
                 <span class="totalDays">
-                    <span class="countfish">{{fullWeekCount}}</span>
+                    <span class="countfish">{{ weeklyFishTotals['Yellowtail']}}</span>  
                 </span>
             </div> 
 
@@ -211,11 +244,15 @@
                     <img id="Hauchinango" src="assets/fish/roosterfish-removebg-preview.png" alt="">
                     <p>Roosterfish</p>
                 </span>
+
                 <div class="fishList">
-                <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> 
+                <!-- <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span>  -->
+                <span class="perdayfisheslist" *ngFor="let perDaysFishes of Roosterfish">{{perDaysFishes}}</span> 
                 </div>
+
+               
                 <span class="totalDays">
-                    <span class="countfish">{{fullWeekCount}}</span>
+                    <span class="countfish">{{ weeklyFishTotals['Roosterfish']}}</span>  
                 </span>
             </div> 
 
@@ -225,11 +262,15 @@
                     <img id="Hauchinango" src="assets/fish/pargo-removebg-preview.png" alt="">
                    <p> Pargo</p>
                 </span>
+
                 <div class="fishList">
-                <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span>
+                <!-- <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> -->
+                <span class="perdayfisheslist" *ngFor="let perDaysFishes of Pargo">{{perDaysFishes}}</span> 
                 </div> 
+
+              
                 <span class="totalDays">
-                    <span class="countfish">{{fullWeekCount}}</span>
+                    <span class="countfish">{{ weeklyFishTotals['Pargo']}}</span>  
                 </span>
             </div> 
 
@@ -239,11 +280,15 @@
                     <img id="Hauchinango" src="assets/fish/cabrilla-removebg-preview.png" alt="">
                     <p>Cabrilla</p>
                     </span>
+
                     <div class="fishList">
-                <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> 
+                <!-- <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span>  -->
+                 
+                <span class="perdayfisheslist" *ngFor="let perDaysFishes of Cabrilla">{{perDaysFishes}}</span> 
                     </div>
+
                 <span class="totalDays">
-                    <span class="countfish">{{fullWeekCount}}</span>
+                    <span class="countfish">{{ weeklyFishTotals['Cabrilla']}}</span>  
                 </span>
             </div> 
 
@@ -253,11 +298,16 @@
                     <img id="Hauchinango" src="assets/fish/triggerfish-removebg-preview.png" alt="">
                     <p>Triggerfish</p>
                 </span>
+
                 <div class="fishList">
-                <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> 
+                <!-- <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span>  -->
+                <span class="perdayfisheslist" *ngFor="let perDaysFishes of Triggerfish">{{perDaysFishes}}</span>
                 </div>
+
+              
                 <span class="totalDays">
-                    <span class="countfish">{{fullWeekCount}}</span>
+                    <span class="countfish">{{ weeklyFishTotals['Triggerfish']}}</span>  
+
                 </span>
             </div> 
 
@@ -267,11 +317,15 @@
                     <img  id="Hauchinango" src="assets/fish/huachinango-removebg-preview.png" alt="">
                     <p>Hauchinango</p>
                 </span>
+
                 <div class="fishList">
-                <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> 
+                <!-- <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span>  -->
+                <span class="perdayfisheslist" *ngFor="let perDaysFishes of Hauchinango">{{perDaysFishes}}</span> 
                 </div>
+
+                
                 <span class="totalDays">
-                    <span class="countfish">{{fullWeekCount}}</span>
+                    <span class="countfish">{{ weeklyFishTotals['Hauchinango']}}</span>  
                 </span>
             </div> 
 
@@ -281,11 +335,15 @@
                     <img id="Hauchinango" src="" alt="">
                     <p>Others</p>
                 </span>
+
                 <div class="fishList">
-                <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span> 
+                <!-- <span class="perdayfisheslist" *ngFor="let perDaysFishes of totalPerDayFishes">{{perDaysFishes}}</span>  -->
+                <span class="perdayfisheslist" *ngFor="let perDaysFishes of Others">{{perDaysFishes}}</span> 
                 </div>
+
+            
                 <span class="totalDays">
-                    <span class="countfish">{{fullWeekCount}}</span>
+                    <span class="countfish">{{ weeklyFishTotals['Others']}}</span>  
                 </span>
             </div> 
     </div>

@@ -12,7 +12,7 @@
     height: auto;
     padding-top: 5rem;
     padding-bottom: 5rem;
-    padding: 5rem 3rem 0rem 3rem;
+    padding: 5rem 0rem 0rem 0rem;
     color: white;
   }
   .backToword {
@@ -261,11 +261,7 @@ width: 100%;
     margin: auto;
   }
 }
-.perdayfisheslist{
-  /* padding-top: 1%; */
-  /* margin: auto; */
-  /* margin-left: -2rem; */
-}
+
 .addsByCompany
 {
   display: flex;
@@ -414,10 +410,10 @@ select[formControlName="filter"] {
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-select[formControlName="filter"]:hover {
+/* select[formControlName="filter"]:hover { */
   /* border-color: #4c48a4; */
   /* box-shadow: 0 0 8px rgba(76, 72, 164, 0.3); */
-}
+/* } */
 
 select[formControlName="filter"]:focus {
   outline: none;
