@@ -268,6 +268,10 @@ getAllFishDataPerDay() {
       this.weeklyFishTotals = this.getWeeklyFishTotals();
     });
   });
+   // Calculate cumulative counts for each fish type
+   this.fishTypes.forEach(fish => {
+    this.fishDailyCounts[fish] = this.calculateCumulative(this.fishDailyCounts[fish]);
+  });
    // Assign the counts for fish species
     this.YellowfinTuna = this.fishDailyCounts['Yellowfin Tuna'];
     this.Dorado = this.fishDailyCounts['Dorado'];
@@ -318,10 +322,10 @@ getDayIndex(dayKey: string): number {
     default: return -1;
   }
 }
-// Add this method in your HomeComponent class
+
 calculateCumulative(counts: number[]): number[] {
   let cumulative = 0;
-  return counts.map(count => cumulative += count);
+  return counts.map(count => cumulative += count);  // Return the cumulative count
 }
 getWeeklyFishTotals() {
   const weeklyTotals: { [fishType: string]: number } = {};
