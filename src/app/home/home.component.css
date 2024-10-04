@@ -1,3 +1,5 @@
+
+
 .container-fluid{
   background: whitesmoke;
 }
@@ -67,6 +69,7 @@
     margin-bottom: -2rem;
 }
 .chart{
+  display: flex;
     background: white;
     color: black;
     /* padding: 1rem 2rem; */
@@ -75,17 +78,49 @@
     box-shadow: 0px 0px 7px 0px;
     border-radius: 10px;
     margin-top: 5px;
+    img{
+      margin: 9px 5px 0px -10px;
+      /* border: 1px solid; */
+      /* border-radius: 50%; */
+      width: 30px;
+      padding: 2px;
+      filter: invert(79%) sepia(0%) saturate(1620%) hue-rotate(236deg) brightness(84%) contrast(96%);
+    }
 }
 .examan{
     padding-top: 5px;
     color: #a9a7a7;
     font-size: 11px;
+    font-weight: 500;
 }
 .chartReport{
     font-weight: 700;
 }
 
- 
+ /* .totals{
+  font-size: 20px;
+  font-weight: 700;
+  padding-bottom: 1rem;
+ } */
+ .totals {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  font-size: 20px;
+  font-weight: 700;
+  padding-bottom: 1rem;
+}
+
+.totals::before {
+  content: '';
+  flex-grow: 1; /* Line takes available space */
+  height: 2px; /* Thickness of the line */
+  background-color: #2D2D8C; /* Line color (adjust as needed) */
+  margin-right: 10px; /* Space between the line and text */
+  margin-top: 10px;
+  margin-left: 7px;
+}
+
 .speciesTitle{
   display: flex;
 }
@@ -93,12 +128,16 @@
   background: #2D2D8C;
   width: 150px;
   text-align: center;
-  padding-top: 3px;
+  padding-top: 9px;
   color: white;
   font-size: 24px;
   font-weight: 600;
   height: 150px;
   border-radius: 0px 0px 100px 100px;
+ 
+  img{
+    width: 100px;
+  }
   
 }
 .speciesContainer{
@@ -218,6 +257,7 @@ width: 100%;
     display: block !important;;
   }
   .species{
+    display: flex;
     background: #2D2D8C;
     width: 100%;
     text-align: center;
@@ -228,7 +268,11 @@ width: 100%;
     height: 50px;
     margin: 1rem 0rem;
     border-radius: 10px;
-    
+    padding-left: 1rem;
+    img{
+      width: 50px;
+      margin-left: 1rem;
+    }
   }
   .speciesData{
     padding: 0rem;
@@ -236,6 +280,9 @@ width: 100%;
   .somekedoggRightSide{
     margin-top: 1rem;
    
+  }
+  .totalDays{
+    padding-top: 6%;
   }
  
 }
@@ -308,3 +355,4 @@ select {
 .button-container {
   margin-left: auto; /* Align button to the right */
 }
+
