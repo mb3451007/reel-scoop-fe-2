@@ -74,13 +74,13 @@ export class HomeComponent implements OnInit {
   fullWeekCount: number = 0;
   fishDataList: any[] = [];
   constructor(private dataService: DataService) {
-    // Initialize fishCounts and fishData
+   
     this.fishTypes.forEach(fish => {
       this.fishCounts[fish] = {
         mondayData: 0, tuesdayData: 0, wednesdayData: 0, thursdayData: 0,
         fridayData: 0, saturdayData: 0, sundayData: 0
       };
-      this.fishData[fish] = []; // Initialize an array for each fish type
+      this.fishData[fish] = []; 
     });
     this.initializeFishData();
   }
@@ -112,7 +112,7 @@ export class HomeComponent implements OnInit {
               
               if (this.fishCounts[fishType]) {
                 this.fishCounts[fishType][dayKey]++;
-                this.fishData[fishType].push(response.data[i]); // Push data to specific fish type
+                this.fishData[fishType].push(response.data[i]);
               }
             }
 
@@ -166,7 +166,7 @@ export class HomeComponent implements OnInit {
       Object.keys(this.fishCounts[fish]).forEach(day => {
         this.fishCounts[fish][day] = 0;
       });
-      this.fishData[fish] = []; // Reset each fish type data
+      this.fishData[fish] = []; 
     });
   }
 
@@ -202,29 +202,31 @@ export class HomeComponent implements OnInit {
   setDateRange(range: string): void {
     const today = new Date();
     let startOfWeek, endOfWeek;
+    const dayOfWeek = today.getDay(); 
+    const offset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; 
   
     switch (range) {
       case 'thisWeek':
         startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() - today.getDay());
+        startOfWeek.setDate(today.getDate() + offset); 
         endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); 
         this.fromDate = startOfWeek.toISOString().split('T')[0];
         this.toDate = endOfWeek.toISOString().split('T')[0];
         break;
   
       case 'lastWeek':
         startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() - today.getDay() - 7);
+        startOfWeek.setDate(today.getDate() + offset - 7); 
         endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); 
         this.fromDate = startOfWeek.toISOString().split('T')[0];
         this.toDate = endOfWeek.toISOString().split('T')[0];
         break;
   
       case 'twoWeeksAgo':
         startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() - today.getDay() - 14);
+        startOfWeek.setDate(today.getDate() + offset - 14); 
         endOfWeek = new Date(startOfWeek);
         endOfWeek.setDate(startOfWeek.getDate() + 6);
         this.fromDate = startOfWeek.toISOString().split('T')[0];
@@ -233,9 +235,9 @@ export class HomeComponent implements OnInit {
   
       case 'threeWeeksAgo':
         startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() - today.getDay() - 21);
+        startOfWeek.setDate(today.getDate() + offset - 21); 
         endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); 
         this.fromDate = startOfWeek.toISOString().split('T')[0];
         this.toDate = endOfWeek.toISOString().split('T')[0];
         break;
@@ -245,6 +247,7 @@ export class HomeComponent implements OnInit {
         this.toDate = '';
     }
   }
+  
   initializeFishData() {
     this.fishDataList.forEach(fish => {
         fish.totalCount = fish.dailyCounts.reduce((a:any, b:any) => a + b, 0);
@@ -265,13 +268,16 @@ getAllFishDataPerDay() {
       if (this.fishDailyCounts[fishType] && dayIndex !== -1) {
         this.fishDailyCounts[fishType][dayIndex]++;
       }
-      this.weeklyFishTotals = this.getWeeklyFishTotals();
     });
   });
+  // Calculate weekly totals
+  this.weeklyFishTotals = this.getWeeklyFishTotals();
+
    // Calculate cumulative counts for each fish type
    this.fishTypes.forEach(fish => {
     this.fishDailyCounts[fish] = this.calculateCumulative(this.fishDailyCounts[fish]);
   });
+
    // Assign the counts for fish species
     this.YellowfinTuna = this.fishDailyCounts['Yellowfin Tuna'];
     this.Dorado = this.fishDailyCounts['Dorado'];
@@ -325,19 +331,19 @@ getDayIndex(dayKey: string): number {
 
 calculateCumulative(counts: number[]): number[] {
   let cumulative = 0;
-  return counts.map(count => cumulative += count);  // Return the cumulative count
+  return counts.map(count => cumulative += count);  
 }
 getWeeklyFishTotals() {
   const weeklyTotals: { [fishType: string]: number } = {};
 
   this.fishTypes.forEach(fishType => {
-    const dailyCounts = this.fishDailyCounts[fishType];  // Get daily counts array
+    const dailyCounts = this.fishDailyCounts[fishType]; 
     
-    // Check if the daily counts are correctly populated
+   
     console.log(`${fishType} daily counts:`, dailyCounts);
 
-    const totalForWeek = dailyCounts.reduce((acc, count) => acc + count, 0);  // Sum up the counts
-    weeklyTotals[fishType] = totalForWeek;  // Store total in an object
+    const totalForWeek = dailyCounts.reduce((acc, count) => acc + count, 0);  
+    weeklyTotals[fishType] = totalForWeek; 
   });
 
   console.log('Weekly Totals:', weeklyTotals);
