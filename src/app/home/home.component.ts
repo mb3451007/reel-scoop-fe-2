@@ -21,14 +21,28 @@ export class HomeComponent implements OnInit {
   };
 
   fishCounts: { [key: string]: { [key: string]: number } } = {};
-  
-  // Create a new object to hold fish data arrays
   fishData: { [key: string]: any[] } = {};
-fishesData:any
+  fishesData: any;
   dayData: { [key: string]: any[] } = {
     mondayData: [], tuesdayData: [], wednesdayData: [], 
     thursdayData: [], fridayData: [], saturdayData: [], sundayData: []
   };
+
+  fishDailyCounts: { [fishType: string]: number[] } = {};
+  YellowfinTuna : number[] = [];
+  Dorado: number[] = [];
+  Sailfish: number[] = [];
+  StripedMarlin : number[] = [];
+  BlueMarlin: number[] = [];
+  BlackMarlin: number[] = [];
+  Wahoo: number[] = [];
+  yellowtail: number[] = [];
+  Roosterfish: number[] = [];
+  Pargo : number[] = [];
+  Cabrilla: number[] = [];
+  Triggerfish: number[] = [];
+  Hauchinango: number[] = [];
+  Others: number[] = [];
 
   totalPerDayFishes: number[] = [0, 0, 0, 0, 0, 0, 0];
   fromDate: string = '';
@@ -39,7 +53,7 @@ fishesData:any
   fish_Angler: number = 0;
   totalFishCount: number = 0;
   fullWeekCount: number = 0;
-
+  fishDataList: any[] = [];
   constructor(private dataService: DataService) {
     // Initialize fishCounts and fishData
     this.fishTypes.forEach(fish => {
@@ -49,6 +63,7 @@ fishesData:any
       };
       this.fishData[fish] = []; // Initialize an array for each fish type
     });
+    this.initializeFishData();
   }
 
   ngOnInit(): void {
@@ -68,7 +83,6 @@ fishesData:any
             const userDetail = response.data[i].userDetails;
             const createdDate = new Date(response.data[i].created_at);
             const fishType = response.data[i].species;
-            this.fullWeekCount = response.data.length;
 
             const dayOfWeek = createdDate.toLocaleString('en-US', { weekday: 'short' }).toUpperCase();
             const dayKey = this.getDayKey(dayOfWeek);
@@ -104,7 +118,7 @@ fishesData:any
         this.calculateWeekDays();
         this.getAllFishDataPerDay(); 
         console.log('Fish Data:', response);
-        console.log('Fish Data:', this.fishData); // Log the fish data per type
+        console.log('Fish Data:', this.fishData); 
       },
       error: (error: any) => {
         console.log(error);
@@ -112,23 +126,7 @@ fishesData:any
     });
   }
 
-  getAllFishDataPerDay() {
-    const allSpecies = new Set<string>();
-    
-    Object.keys(this.dayData).forEach(dayKey => {
-      this.dayData[dayKey].forEach(data => {
-        allSpecies.add(data.species);
-      });
-    });
-  
-    allSpecies.forEach(species => {
-      console.log(`Data for ${species}:`);
-      Object.keys(this.dayData).forEach(dayKey => {
-        this.fishesData = this.dayData[dayKey].filter(data => data.species === species);
-        console.log(`  ${dayKey}ss:`, this.fishesData);
-      });
-    });
-  }
+
   
   resetData() {
     this.charterFishCount = 0;
@@ -228,8 +226,83 @@ fishesData:any
         this.toDate = '';
     }
   }
+  initializeFishData() {
+    // Example data for different fish species
+    this.fishDataList = [
+        {
+            name: 'Yellowfin Tuna',
+            dailyCounts: [5, 10, 3, 0, 2, 1, 4],
+            totalCount: 0 // Will be calculated
+        },
+        {
+            name: 'Dorado',
+            dailyCounts: [2, 5, 0, 1, 0, 3, 2],
+            totalCount: 0
+        },
+        {
+            name: 'Sailfish',
+            dailyCounts: [0, 1, 2, 3, 1, 0, 0],
+            totalCount: 0
+        },
+        // Add other fish species here
+    ];
+
+    // Calculate total count for each fish
+    this.fishDataList.forEach(fish => {
+        fish.totalCount = fish.dailyCounts.reduce((a:any, b:any) => a + b, 0);
+    });
+}
+getAllFishDataPerDay() {
+
+  this.fishTypes.forEach(fish => {
+    this.fishDailyCounts[fish] = [0, 0, 0, 0, 0, 0, 0]; 
+  });
+
   
+  Object.keys(this.dayData).forEach(dayKey => {
+    this.dayData[dayKey].forEach(data => {
+      const fishType = data.species;
+      const dayIndex = this.getDayIndex(dayKey);
+
+      if (this.fishDailyCounts[fishType] && dayIndex !== -1) {
+        this.fishDailyCounts[fishType][dayIndex]++;
+      }
+    });
+  });
+   // Assign the counts for fish species
+    this.YellowfinTuna = this.fishDailyCounts['Yellowfin Tuna'];
+    this.Dorado = this.fishDailyCounts['Dorado'];
+    this.Sailfish = this.fishDailyCounts['Sailfish'];
+    this.StripedMarlin = this.fishDailyCounts['Striped Marlin'];
+    this.BlueMarlin = this.fishDailyCounts['Blue Marlin'];
+    this.BlackMarlin = this.fishDailyCounts['Black Marlin'];
+    this.Wahoo = this.fishDailyCounts['Wahoo'];
+    this.yellowtail = this.fishDailyCounts['Yellowtail'];
+    this.Roosterfish = this.fishDailyCounts['Roosterfish'];
+    this.Pargo = this.fishDailyCounts['Pargo'];
+    this.Cabrilla = this.fishDailyCounts['Cabrilla'];
+    this.Triggerfish = this.fishDailyCounts['Triggerfish'];
+    this.Hauchinango = this.fishDailyCounts['Hauchinango'];
+    this.Others = this.fishDailyCounts['Others'];
+
+    
   
-  
-  
+
+  // Logging the data per fish type per day
+  Object.keys(this.fishDailyCounts).forEach(fishType => {
+    console.log(`Data for ${fishType}:`, this.fishDailyCounts[fishType]);
+  });
+}
+getDayIndex(dayKey: string): number {
+  switch (dayKey) {
+    case 'mondayData': return 0;
+    case 'tuesdayData': return 1;
+    case 'wednesdayData': return 2;
+    case 'thursdayData': return 3;
+    case 'fridayData': return 4;
+    case 'saturdayData': return 5;
+    case 'sundayData': return 6;
+    default: return -1;
+  }
+}
 }
