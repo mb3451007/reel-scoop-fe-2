@@ -86,8 +86,8 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAllData();
     this.setDateRange('thisWeek');
+    this.getAllData();
   }
 
   getAllData() {
