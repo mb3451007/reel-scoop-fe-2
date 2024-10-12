@@ -31,29 +31,31 @@ export class DataComponent implements OnInit {
   setDateRange(range: string): void {
     const today = new Date();
     let startOfWeek, endOfWeek;
+    const dayOfWeek = today.getDay(); 
+    const offset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; 
   
     switch (range) {
       case 'thisWeek':
         startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() - today.getDay());
+        startOfWeek.setDate(today.getDate() + offset); 
         endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); 
         this.fromDate = startOfWeek.toISOString().split('T')[0];
         this.toDate = endOfWeek.toISOString().split('T')[0];
         break;
   
       case 'lastWeek':
         startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() - today.getDay() - 7);
+        startOfWeek.setDate(today.getDate() + offset - 7); 
         endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); 
         this.fromDate = startOfWeek.toISOString().split('T')[0];
         this.toDate = endOfWeek.toISOString().split('T')[0];
         break;
   
       case 'twoWeeksAgo':
         startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() - today.getDay() - 14);
+        startOfWeek.setDate(today.getDate() + offset - 14); 
         endOfWeek = new Date(startOfWeek);
         endOfWeek.setDate(startOfWeek.getDate() + 6);
         this.fromDate = startOfWeek.toISOString().split('T')[0];
@@ -62,9 +64,9 @@ export class DataComponent implements OnInit {
   
       case 'threeWeeksAgo':
         startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() - today.getDay() - 21);
+        startOfWeek.setDate(today.getDate() + offset - 21); 
         endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); 
         this.fromDate = startOfWeek.toISOString().split('T')[0];
         this.toDate = endOfWeek.toISOString().split('T')[0];
         break;
@@ -74,6 +76,7 @@ export class DataComponent implements OnInit {
         this.toDate = '';
     }
   }
+
   addData() {
     this.router.navigate(['/add-data']);
   }
