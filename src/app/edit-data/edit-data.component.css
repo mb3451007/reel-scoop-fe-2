@@ -1,0 +1,110 @@
+/* Container styling */
+.edit-data-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background-color: #f9f9fb;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+  }
+  
+  .edit-data-container h2 {
+    text-align: center;
+    color: #333;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+  
+  label {
+    font-weight: 500;
+    margin-top: 1rem;
+    display: block;
+    color: #555;
+  }
+  
+  input[type="text"],
+  input[type="number"] {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #333;
+    box-sizing: border-box;
+    transition: border 0.3s ease;
+  }
+  
+  input[type="text"]:focus,
+  input[type="number"]:focus {
+    border: 1px solid #6a67ce;
+    outline: none;
+  }
+  
+  button[type="submit"],
+  button[type="button"] {
+    width: 100%;
+    padding: 0.7rem;
+    margin-top: 1rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button[type="submit"] {
+    background-color: #6a67ce;
+    color: #fff;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #574fbf;
+  }
+  
+  button[type="button"] {
+    background-color: #ddd;
+    color: #333;
+  }
+  
+  button[type="button"]:hover {
+    background-color: #bbb;
+  }
+  select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    background-color: white;
+    /* appearance: none;  */
+    /* -webkit-appearance: none;  */
+    /* -moz-appearance: none; */
+}
+
+select:focus {
+    border-color: #6a67ce;
+    outline: none;
+}
+
+
+.form-group select {
+    background: white url('data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTYgMTAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIxMCIgdmlld0JveD0iMCAwIDE2IDEwIiBmaWxsPSIjMDAwMDAwIj48cGF0aCBkPSJNMiAxTDggNkwxNCAxSCIvPjwvc3ZnPg==') no-repeat right 10px center;
+    background-size: 12px;
+}
+
+
+select {
+    color: #555;
+}
+
+select option {
+    color: #333;
+}
+option{
+    overflow: scroll;
+    height: 100px;
+}

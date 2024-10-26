@@ -254,68 +254,64 @@ export class HomeComponent implements OnInit {
     });
 }
 getAllFishDataPerDay() {
-
+  // Initialize daily fish quantities instead of counts
   this.fishTypes.forEach(fish => {
-    this.fishDailyCounts[fish] = [0, 0, 0, 0, 0, 0, 0]; 
+    this.fishDailyCounts[fish] = [0, 0, 0, 0, 0, 0, 0];
   });
 
-  
   Object.keys(this.dayData).forEach(dayKey => {
     this.dayData[dayKey].forEach(data => {
       const fishType = data.species;
+      const quantity = data.quantity || 0; // Assuming 'quantity' represents the fish count
       const dayIndex = this.getDayIndex(dayKey);
 
       if (this.fishDailyCounts[fishType] && dayIndex !== -1) {
-        this.fishDailyCounts[fishType][dayIndex]++;
+        this.fishDailyCounts[fishType][dayIndex] += quantity;
       }
     });
   });
+
   // Calculate weekly totals
   this.weeklyFishTotals = this.getWeeklyFishTotals();
 
-   // Calculate cumulative counts for each fish type
-   this.fishTypes.forEach(fish => {
+  // Calculate cumulative quantities for each fish type
+  this.fishTypes.forEach(fish => {
     this.fishDailyCounts[fish] = this.calculateCumulative(this.fishDailyCounts[fish]);
   });
 
-   // Assign the counts for fish species
-    this.YellowfinTuna = this.fishDailyCounts['Yellowfin Tuna'];
-    this.Dorado = this.fishDailyCounts['Dorado'];
-    this.Sailfish = this.fishDailyCounts['Sailfish'];
-    this.StripedMarlin = this.fishDailyCounts['Striped Marlin'];
-    this.BlueMarlin = this.fishDailyCounts['Blue Marlin'];
-    this.BlackMarlin = this.fishDailyCounts['Black Marlin'];
-    this.Wahoo = this.fishDailyCounts['Wahoo'];
-    this.yellowtail = this.fishDailyCounts['Yellowtail'];
-    this.Roosterfish = this.fishDailyCounts['Roosterfish'];
-    this.Pargo = this.fishDailyCounts['Pargo'];
-    this.Cabrilla = this.fishDailyCounts['Cabrilla'];
-    this.Triggerfish = this.fishDailyCounts['Triggerfish'];
-    this.Hauchinango = this.fishDailyCounts['Hauchinango'];
-    this.Others = this.fishDailyCounts['Others'];
+  // Assign quantities for each fish species
+  this.YellowfinTuna = this.fishDailyCounts['Yellowfin Tuna'];
+  this.Dorado = this.fishDailyCounts['Dorado'];
+  this.Sailfish = this.fishDailyCounts['Sailfish'];
+  this.StripedMarlin = this.fishDailyCounts['Striped Marlin'];
+  this.BlueMarlin = this.fishDailyCounts['Blue Marlin'];
+  this.BlackMarlin = this.fishDailyCounts['Black Marlin'];
+  this.Wahoo = this.fishDailyCounts['Wahoo'];
+  this.yellowtail = this.fishDailyCounts['Yellowtail'];
+  this.Roosterfish = this.fishDailyCounts['Roosterfish'];
+  this.Pargo = this.fishDailyCounts['Pargo'];
+  this.Cabrilla = this.fishDailyCounts['Cabrilla'];
+  this.Triggerfish = this.fishDailyCounts['Triggerfish'];
+  this.Hauchinango = this.fishDailyCounts['Hauchinango'];
+  this.Others = this.fishDailyCounts['Others'];
 
-    
-  
-    this.YellowfinTunaCumulative = this.calculateCumulative(this.YellowfinTuna);
-    this.DoradoCumulative = this.calculateCumulative(this.Dorado);
-    this.SailfishCumulative = this.calculateCumulative(this.Sailfish);
-    this.StripedMarlinCumulative = this.calculateCumulative(this.StripedMarlin);
-    this.BlueMarlinCumulative = this.calculateCumulative(this.BlueMarlin);
-    this.BlackMarlinCumulative = this.calculateCumulative(this.BlackMarlin);
-    this.WahooCumulative = this.calculateCumulative(this.Wahoo);
-    this.yellowtailCumulative = this.calculateCumulative(this.yellowtail);
-    this.RoosterfishCumulative = this.calculateCumulative(this.Roosterfish);
-    this.PargoCumulative = this.calculateCumulative(this.Pargo);
-    this.CabrillaCumulative = this.calculateCumulative(this.Cabrilla);
-    this.TriggerfishCumulative = this.calculateCumulative(this.Triggerfish);
-    this.HauchinangoCumulative = this.calculateCumulative(this.Hauchinango);
-    this.OthersCumulative = this.calculateCumulative(this.Others);
-
-  // Logging the data per fish type per day
-  Object.keys(this.fishDailyCounts).forEach(fishType => {
-    console.log(`Data for ${fishType}:`, this.fishDailyCounts[fishType]);
-  });
+  // Calculate cumulative arrays for each fish type
+  this.YellowfinTunaCumulative = this.calculateCumulative(this.YellowfinTuna);
+  this.DoradoCumulative = this.calculateCumulative(this.Dorado);
+  this.SailfishCumulative = this.calculateCumulative(this.Sailfish);
+  this.StripedMarlinCumulative = this.calculateCumulative(this.StripedMarlin);
+  this.BlueMarlinCumulative = this.calculateCumulative(this.BlueMarlin);
+  this.BlackMarlinCumulative = this.calculateCumulative(this.BlackMarlin);
+  this.WahooCumulative = this.calculateCumulative(this.Wahoo);
+  this.yellowtailCumulative = this.calculateCumulative(this.yellowtail);
+  this.RoosterfishCumulative = this.calculateCumulative(this.Roosterfish);
+  this.PargoCumulative = this.calculateCumulative(this.Pargo);
+  this.CabrillaCumulative = this.calculateCumulative(this.Cabrilla);
+  this.TriggerfishCumulative = this.calculateCumulative(this.Triggerfish);
+  this.HauchinangoCumulative = this.calculateCumulative(this.Hauchinango);
+  this.OthersCumulative = this.calculateCumulative(this.Others);
 }
+
 getDayIndex(dayKey: string): number {
   switch (dayKey) {
     case 'mondayData': return 0;
@@ -330,9 +326,19 @@ getDayIndex(dayKey: string): number {
 }
 
 calculateCumulative(counts: number[]): number[] {
+  const todayIndex = new Date().getDay() - 1; // Adjusted to match array index (0 = Monday)
   let cumulative = 0;
-  return counts.map(count => cumulative += count);  
+  
+  return counts.map((count, index) => {
+    if (index <= todayIndex) {
+      cumulative += count;
+      return cumulative;
+    } else {
+      return 0;
+    }
+  });
 }
+
 getWeeklyFishTotals() {
   const weeklyTotals: { [fishType: string]: number } = {};
 

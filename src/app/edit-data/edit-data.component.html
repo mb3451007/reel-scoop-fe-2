@@ -1,0 +1,34 @@
+<div class="edit-data-container">
+    <h2>Edit Data</h2>
+    <form (ngSubmit)="onSubmit()" *ngIf="data">
+      <label for="location">Location:</label>
+      <input type="text" id="location" [(ngModel)]="data.location" name="location" required />
+  
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" [(ngModel)]="data.quantity" name="quantity" required />
+      <label for="species">Species</label>
+      <select id="species" formControlName="species" required>
+        <option value="Yellowfin Tuna">Yellowfin Tuna</option>
+        <option value="Dorado">Dorado</option>
+        <option value="Sailfish">Sailfish</option>
+        <option value="Striped Marlin">Striped Marlin</option>
+        <option value="Blue Marlin">Blue Marlin</option>
+        <option value="Black Marlin">Black Marlin</option>
+        <option value="Wahoo">Wahoo</option>
+        <option value="Yellowtail">Yellowtail</option>
+        <option value="Roosterfish">Roosterfish</option>
+        <option value="Pargo">Pargo</option>
+        <option value="Cabrilla">Cabrilla</option>
+        <option value="Triggerfish">Triggerfish</option>
+        <option value="Hauchinango">Hauchinango</option>
+        <option value="Others">Others</option>
+    </select>
+  
+      <label for="bait">Bait:</label>
+      <input type="text" id="bait" [(ngModel)]="data.bait" name="bait" required />
+  
+      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+    </form>
+  </div>
+  

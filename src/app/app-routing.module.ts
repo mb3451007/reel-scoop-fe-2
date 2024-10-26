@@ -6,6 +6,7 @@ import { DataComponent } from './data/data.component';
 import { AddDataComponent } from './add-data/add-data.component';
 import { authGuard } from './auth.guard';
 import { HomeComponent } from './home/home.component';
+import { EditDataComponent } from './edit-data/edit-data.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'/data', pathMatch:'full',},
@@ -14,6 +15,7 @@ const routes: Routes = [
   {path:'home', component:HomeComponent },
   {path:'data', component:DataComponent , canActivate:[authGuard]},
   {path:'add-data', component:AddDataComponent , canActivate:[authGuard]},
+  {path:'edit-data/:id', component:EditDataComponent , canActivate:[authGuard]},
 ];
 
 @NgModule({

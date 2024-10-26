@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { DataService } from '../data.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-data',
@@ -10,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class AddDataComponent {
   addDataForm:FormGroup
-  constructor(private dataService:DataService, private fb: FormBuilder ,private router:Router) { 
+  constructor(private dataService:DataService, private fb: FormBuilder ,private router:Router,private toastr: ToastrService) { 
     this.addDataForm = this.fb.group({
       location: [''],
       quantity: [''],
@@ -29,13 +30,18 @@ const  data={
     bait: this.addDataForm.value.bait,
     userId: userId,  
   }
-  console.log(data,'data to be added')
-this.dataService.addData(data).subscribe({
-  next :(response) =>{
-    console.log('Data added successfully:', response)
-    this.addDataForm.reset()
-    this.router.navigate(['/data']);
-  }
-})
-}
-}
+  console.log(data, 'data to be added');
+  this.dataService.addData(data).subscribe({
+    next: (response) => {
+      console.log('Data added successfully:', response);
+      this.toastr.success('Data added successfully!'); 
+      this.addDataForm.reset();
+      this.router.navigate(['/data']);
+    },
+    error: (error: any) => { 
+      this.toastr.error('Failed to add data!'); 
+      console.error('Error:', error);
+    }
+  });
+  
+}}

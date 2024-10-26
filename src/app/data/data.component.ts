@@ -89,7 +89,7 @@ export class DataComponent implements OnInit {
         this.data = response.data;
         this.totalPages = Math.ceil(response.totalDataCount / this.limit); 
         this.generatePageNumbers();
-        console.log('Data:', this.data);
+        console.log('Data fetch:', this.data);
         console.log('Data:', response);
       },
       error: (error) => {
@@ -108,4 +108,33 @@ export class DataComponent implements OnInit {
   private generatePageNumbers(): void {
     this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
+  // 
+
+  isEditable(date: string): boolean {
+    const recordDate = new Date(date);
+    const today = new Date();
+    
+    // Calculate start and end of current week
+    const dayOfWeek = today.getDay();
+    const offset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() + offset);
+    startOfWeek.setHours(0, 0, 0, 0); // Start of the week
+  
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    endOfWeek.setHours(23, 59, 59, 999); // End of the week
+  
+    return recordDate >= startOfWeek && recordDate <= endOfWeek;
+  }
+  
+  
+  editData(itemId: any): void {
+    console.log(itemId)
+    // if (this.isEditable(itemId.date)) {
+     
+      this.router.navigate(['edit-data', itemId]);
+    // }
+  }
+  
 }
