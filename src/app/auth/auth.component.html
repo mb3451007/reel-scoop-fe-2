@@ -20,11 +20,13 @@
       <div class="form-group">
         <label>User Type</label>
         <select id="userType" formControlName="userType">
+          <option value="" disabled selected>Select User Type</option>
           <option value="Charter">Charter</option>
           <option value="Angler">Angler</option>
           <option value="Fish/Charter">Fish/Charter</option>
           <option value="Fish/Angler">Fish/Angler</option>
         </select>
+      
         <!-- <input type="text" formControlName="userType" class="form-input" /> -->
       </div>
       <button class="btn-primary" (click)="signUp()">Sign Up</button>

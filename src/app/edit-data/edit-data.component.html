@@ -7,7 +7,7 @@
       <label for="quantity">Quantity:</label>
       <input type="number" id="quantity" [(ngModel)]="data.quantity" name="quantity" required />
       <label for="species">Species</label>
-      <select id="species" formControlName="species" required>
+      <select id="species" [(ngModel)]="data.species" name="species" required>
         <option value="Yellowfin Tuna">Yellowfin Tuna</option>
         <option value="Dorado">Dorado</option>
         <option value="Sailfish">Sailfish</option>
@@ -22,7 +22,8 @@
         <option value="Triggerfish">Triggerfish</option>
         <option value="Hauchinango">Hauchinango</option>
         <option value="Others">Others</option>
-    </select>
+      </select>
+      
   
       <label for="bait">Bait:</label>
       <input type="text" id="bait" [(ngModel)]="data.bait" name="bait" required />

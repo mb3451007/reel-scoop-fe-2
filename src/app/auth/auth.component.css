@@ -108,9 +108,7 @@ form input, form select, form button {
 
 
 form select {
-  appearance: none; 
-  -webkit-appearance: none; 
-  -moz-appearance: none; 
+ 
   
   background-color: #fff;
   padding: 10px;

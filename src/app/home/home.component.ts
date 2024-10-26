@@ -92,7 +92,7 @@ export class HomeComponent implements OnInit {
 
   getAllData() {
     this.resetData();
-
+  
     this.dataService.getAllData(this.fromDate, this.toDate).subscribe({
       next: (response: any) => {
         console.log(response);
@@ -102,34 +102,35 @@ export class HomeComponent implements OnInit {
             const userDetail = response.data[i].userDetails;
             const createdDate = new Date(response.data[i].created_at);
             const fishType = response.data[i].species;
-
+            const quantity = response.data[i].quantity || 0;
+  
             const dayOfWeek = createdDate.toLocaleString('en-US', { weekday: 'short' }).toUpperCase();
             const dayKey = this.getDayKey(dayOfWeek);
-            
+  
             if (dayKey) {
               this.dayData[dayKey].push(response.data[i]);
-              this.dailyFishCount[dayKey]++;
+              this.dailyFishCount[dayKey] += quantity;  // Add quantity here instead of incrementing by 1
               
               if (this.fishCounts[fishType]) {
-                this.fishCounts[fishType][dayKey]++;
+                this.fishCounts[fishType][dayKey] += quantity;  // Accumulate fish count by quantity
                 this.fishData[fishType].push(response.data[i]);
               }
             }
-
+  
             if (userDetail) {
               const userType = userDetail.user_type;
               if (userType === 'Fish/Charter') {
-                this.fish_Charter++;
-                this.totalFishCount++;
+                this.fish_Charter += quantity;
+                this.totalFishCount += quantity;
               } else if (userType === 'Charter') {
-                this.charterFishCount++;
-                this.totalFishCount++;
+                this.charterFishCount += quantity;
+                this.totalFishCount += quantity;
               } else if (userType === 'Angler') {
-                this.anglerFishCount++;
-                this.totalFishCount++;
+                this.anglerFishCount += quantity;
+                this.totalFishCount += quantity;
               } else if (userType === 'Fish/Angler') {
-                this.fish_Angler++;
-                this.totalFishCount++;
+                this.fish_Angler += quantity;
+                this.totalFishCount += quantity;
               }
             }
           }
@@ -144,6 +145,7 @@ export class HomeComponent implements OnInit {
       }
     });
   }
+  
 
 
   

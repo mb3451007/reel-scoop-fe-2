@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-auth',
@@ -12,7 +13,7 @@ export class AuthComponent {
   signUpForm:FormGroup
   loginForm:FormGroup
   loginMode:boolean = false;
-constructor(private router:Router, private fb:FormBuilder ,private userService:UserService){
+constructor(private router:Router, private fb:FormBuilder ,private userService:UserService,private toastr: ToastrService){
   this.signUpForm = this.fb.group({
     firstName:['', Validators.required],
     lastName:['', Validators.required],
@@ -40,6 +41,7 @@ constructor(private router:Router, private fb:FormBuilder ,private userService:U
   this.userService.signUp(userData).subscribe({
     next :(response:any) =>{
       console.log('User signed up successfully', response);
+      this.toastr.success('signed Up successfully!');
       const user ={
         userId : response.user._id,
         userName : response.user.first_name,
@@ -47,10 +49,13 @@ constructor(private router:Router, private fb:FormBuilder ,private userService:U
       this.router.navigate(['/data']);
       localStorage.setItem('token', response.token,);
       localStorage.setItem('User', JSON.stringify(user));
-      
       this.userService.setUserName(response.user.first_name);
     },
-    error: (error) => {console.error('Error:', error)}
+    error: (error) => {
+      console.error('Error:', error)
+      this.toastr.error('signed Up Failed!');
+    }
+    
   })
 
   }
@@ -63,6 +68,7 @@ constructor(private router:Router, private fb:FormBuilder ,private userService:U
    this.userService.login(loginData).subscribe({
     next :(response) =>{
       console.log('User logged in successfully', response);
+      this.toastr.success('User logged in successfully!');
       const user ={
         userId : response.user._id,
         userName : response.user.first_name,
@@ -72,7 +78,10 @@ constructor(private router:Router, private fb:FormBuilder ,private userService:U
       localStorage.setItem('User',JSON.stringify(user)  );
       this.userService.setUserName(response.user.first_name);
     },
-    error: (error) => {console.error('Error:', error)}
+    error: (error) => {
+      console.error('Error:', error)
+      this.toastr.error('Error Logging in!');
+    }
    })
   }
 }
