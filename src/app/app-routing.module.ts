@@ -9,7 +9,7 @@ import { HomeComponent } from './home/home.component';
 import { EditDataComponent } from './edit-data/edit-data.component';
 
 const routes: Routes = [
-  {path:'', redirectTo:'/data', pathMatch:'full',},
+  {path:'', redirectTo:'/home', pathMatch:'full',},
   {path:'auth', component:AuthComponent , canActivate:[authGuard]},
   {path:'header', component:HeaderComponent },
   {path:'home', component:HomeComponent },

@@ -73,6 +73,8 @@ export class HomeComponent implements OnInit {
   totalFishCount: number = 0;
   fullWeekCount: number = 0;
   fishDataList: any[] = [];
+  userLoggedIn:any
+  userLoginIn:boolean=false
   constructor(private dataService: DataService) {
    
     this.fishTypes.forEach(fish => {
@@ -86,6 +88,12 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const user= localStorage.getItem('User');
+    if(user){
+      this.userLoggedIn=JSON.parse(user)
+    }
+console.log('user logged in',this.userLoggedIn)
+    this.checkLogin()
     this.setDateRange('thisWeek');
     this.getAllData();
   }
@@ -256,7 +264,6 @@ export class HomeComponent implements OnInit {
     });
 }
 getAllFishDataPerDay() {
-  // Initialize daily fish quantities instead of counts
   this.fishTypes.forEach(fish => {
     this.fishDailyCounts[fish] = [0, 0, 0, 0, 0, 0, 0];
   });
@@ -273,15 +280,12 @@ getAllFishDataPerDay() {
     });
   });
 
-  // Calculate weekly totals
-  this.weeklyFishTotals = this.getWeeklyFishTotals();
 
-  // Calculate cumulative quantities for each fish type
+  this.weeklyFishTotals = this.getWeeklyFishTotals();
   this.fishTypes.forEach(fish => {
     this.fishDailyCounts[fish] = this.calculateCumulative(this.fishDailyCounts[fish]);
   });
 
-  // Assign quantities for each fish species
   this.YellowfinTuna = this.fishDailyCounts['Yellowfin Tuna'];
   this.Dorado = this.fishDailyCounts['Dorado'];
   this.Sailfish = this.fishDailyCounts['Sailfish'];
@@ -328,7 +332,7 @@ getDayIndex(dayKey: string): number {
 }
 
 calculateCumulative(counts: number[]): number[] {
-  const todayIndex = new Date().getDay() - 1; // Adjusted to match array index (0 = Monday)
+  const todayIndex = new Date().getDay() - 1; 
   let cumulative = 0;
   
   return counts.map((count, index) => {
@@ -346,17 +350,18 @@ getWeeklyFishTotals() {
 
   this.fishTypes.forEach(fishType => {
     const dailyCounts = this.fishDailyCounts[fishType]; 
-    
-   
-    console.log(`${fishType} daily counts:`, dailyCounts);
-
     const totalForWeek = dailyCounts.reduce((acc, count) => acc + count, 0);  
     weeklyTotals[fishType] = totalForWeek; 
   });
-
-  console.log('Weekly Totals:', weeklyTotals);
   return weeklyTotals;
 }
 
-
+checkLogin(){
+  if (this.userLoggedIn){
+     this.userLoginIn=true;
+  }
+  else{
+    this.userLoginIn=false;
+  }
+}
 }

@@ -15,12 +15,15 @@
     padding: 5rem 0rem 0rem 0rem;
     color: white;
   }
-  .backToword {
+  .button-section1 {
     padding-bottom: 1rem;
-    button {
+    .icon-button {
       border: none;
       border-radius: 50%;
       cursor: pointer;
+      width: 30px;
+      height: 30px;
+    
   
       img {
         width: 15px;
@@ -459,6 +462,27 @@ select {
 }
 
 .button-container {
-  margin-left: auto; /* Align button to the right */
+  margin-left: auto; 
 }
 
+.add-fish-btn {
+  background-color: #4141C8; 
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, background-color 0.3s;
+}
+
+.add-fish-btn:hover {
+  background-color: #3232a6; 
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.add-fish-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.1);
+}

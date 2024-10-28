@@ -1,9 +1,18 @@
 <div class="container-fluid">
     <div class="row homeContainer">
-        <div class="col-12 backToword"> 
-            <button >
-            <img src="assets/home/left-arrow-svgrepo-com.svg" alt="">
-        </button>
+        <div class="col-12 backToword d-flex justify-content-between"> 
+            <div class="button-section1">
+                <button class="icon-button" >
+                    <img src="assets/home/left-arrow-svgrepo-com.svg" alt="">
+                </button>
+            </div>
+         
+        <div class="button-section" *ngIf="!userLoginIn">
+            <button  class="btn add-fish-btn justify-content-end" routerLink="/data">Login</button>
+        </div>
+        <div class="button-section" *ngIf="userLoginIn">
+            <button  class="btn add-fish-btn justify-content-end" routerLink="/data">Dashboard</button>
+        </div>
     </div>
     <div class="col-12 somekedogg"><span>SMOKEDOGG</span></div>
     <div class="col-12 reelScoop"><span>The Reel Scoop</span></div>
