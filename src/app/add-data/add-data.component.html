@@ -4,7 +4,15 @@
     <form [formGroup]="addDataForm" action="" class="data-form">
         <div class="form-group">
             <label for="location">Location</label>
-            <input type="text" id="location" formControlName="location" required>
+            <select id="location" formControlName="location" required>
+                <option value="" selected disabled>Select Location</option>
+                <option value="Los Barriles">Los Barriles</option>
+                <option value="Buena Vista">Buena Vista</option>
+                <option value="La Ribera">La Ribera</option>
+                <option value="Cabo Pulmo">Cabo Pulmo</option>
+                <option value="El Encanto de La Laguna">El Encanto de La Laguna</option>
+                <option value="Puerto Los Cabos">Puerto Los Cabos</option>
+            </select>
         </div>
         <div class="form-group">
             <label for="quantity">Quantity</label>
@@ -33,7 +41,15 @@
         </div>
         <div class="form-group">
             <label for="bait">Bait</label>
-            <input type="text" id="bait" formControlName="bait" required>
+            <select id="bait" formControlName="bait" required>
+                <option value="" selected disabled>Select Bait</option>
+                <option value="Sardines">Sardines</option>
+                <option value="Ballyhoo">Ballyhoo</option>
+                <option value="Mackerel">Mackerel</option>
+                <option value="Calamari">Calamari</option>
+                <option value="Caballito">Caballito</option>
+                <option value="Jurelito Verde">Jurelito Verde</option>
+            </select>
         </div>
         <button type="submit" class="submit-button" (click)="addData()">Submit</button>
     </form>

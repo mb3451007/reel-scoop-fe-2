@@ -2,7 +2,14 @@
     <h2>Edit Data</h2>
     <form (ngSubmit)="onSubmit()" *ngIf="data">
       <label for="location">Location:</label>
-      <input type="text" id="location" [(ngModel)]="data.location" name="location" required />
+        <select id="location" [(ngModel)]="data.location" name="location" required>
+          <option value="Los Barriles">Los Barriles</option>
+          <option value="Buena Vista">Buena Vista</option>
+          <option value="La Ribera">La Ribera</option>
+          <option value="Cabo Pulmo">Cabo Pulmo</option>
+          <option value="El Encanto de La Laguna">El Encanto de La Laguna</option>
+          <option value="Puerto Los Cabos">Puerto Los Cabos</option>
+      </select>
   
       <label for="quantity">Quantity:</label>
       <input type="number" id="quantity" [(ngModel)]="data.quantity" name="quantity" required />
@@ -26,8 +33,14 @@
       
   
       <label for="bait">Bait:</label>
-      <input type="text" id="bait" [(ngModel)]="data.bait" name="bait" required />
-  
+      <select id="bait" [(ngModel)]="data.bait" name="bait" required>
+        <option value="Sardines">Sardines</option>
+        <option value="Ballyhoo">Ballyhoo</option>
+        <option value="Mackerel">Mackerel</option>
+        <option value="Calamari">Calamari</option>
+        <option value="Caballito">Caballito</option>
+        <option value="Jurelito Verde">Jurelito Verde</option>
+    </select>
       <button type="submit" class="btn btn-primary">Save</button>
       <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
     </form>
