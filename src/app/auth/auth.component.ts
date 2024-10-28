@@ -17,13 +17,13 @@ constructor(private router:Router, private fb:FormBuilder ,private userService:U
   this.signUpForm = this.fb.group({
     firstName:['', Validators.required],
     lastName:['', Validators.required],
-    email:['', Validators.required],
+    email:['', Validators.required,Validators.email],
     password:['', Validators.required],
     userType: ['', Validators.required]
   })
   this.loginForm = this.fb.group({
-    email:[''],
-    password:['']
+    email:['',Validators.required , Validators.email],
+    password:['', Validators.required]
   })
 }
   changeMode(){
@@ -41,7 +41,7 @@ constructor(private router:Router, private fb:FormBuilder ,private userService:U
   this.userService.signUp(userData).subscribe({
     next :(response:any) =>{
       console.log('User signed up successfully', response);
-      this.toastr.success('signed Up successfully!');
+      this.toastr.success('Signed up successfully!');
       const user ={
         userId : response.user._id,
         userName : response.user.first_name,
@@ -53,7 +53,13 @@ constructor(private router:Router, private fb:FormBuilder ,private userService:U
     },
     error: (error) => {
       console.error('Error:', error)
-      this.toastr.error('signed Up Failed!');
+      console.log(error.status);
+      if(error.status===409){
+        this.toastr.error('Email already exists. Please use a different email.');
+      }
+      else{
+        this.toastr.error('Error signing up! Please try again.');
+      }
     }
     
   })
@@ -79,8 +85,14 @@ constructor(private router:Router, private fb:FormBuilder ,private userService:U
       this.userService.setUserName(response.user.first_name);
     },
     error: (error) => {
+      this.loginForm.reset();
       console.error('Error:', error)
-      this.toastr.error('Error Logging in!');
+      if(error.status === 401){
+        this.toastr.error('Invalid credentials. Please try again.');
+      }
+      else{
+        this.toastr.error('Error logging in! Please try again.');
+      }
     }
    })
   }
