@@ -14,6 +14,9 @@ export class DataService {
   getData(page:any,userId:any,fromDate:string,toDate:string) {
     return this.http.get<any>(`${this.baseUrl}/data/getData/${page}?userId=${userId}&fromDate=${fromDate}&toDate=${toDate}`);
   }
+  getAllUsersData(page:any,fromDate:string,toDate:string) {
+    return this.http.get<any>(`${this.baseUrl}/data/getAllUsersData/${page}?fromDate=${fromDate}&toDate=${toDate}`);
+  }
   getAllData(fromDate:string,toDate:string) {
     return this.http.get<any>(`${this.baseUrl}/data/getAllData/?fromDate=${fromDate}&toDate=${toDate}`);
   }
@@ -25,5 +28,9 @@ export class DataService {
   }
   getDataById(id: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/data/getDataById/${id}`);
+  }
+  deleteData(id: string): Observable<any> {
+    console.log(id , "delete")
+    return this.http.delete(`${this.baseUrl}/data/deleteData/${id}`);
   }
 }

@@ -3,22 +3,6 @@
     <h2 class="form-title">Add Data</h2>
     <form [formGroup]="addDataForm" action="" class="data-form">
         <div class="form-group">
-            <label for="location">Location</label>
-            <select id="location" formControlName="location" required>
-                <option value="" selected disabled>Select Location</option>
-                <option value="Los Barriles">Los Barriles</option>
-                <option value="Buena Vista">Buena Vista</option>
-                <option value="La Ribera">La Ribera</option>
-                <option value="Cabo Pulmo">Cabo Pulmo</option>
-                <option value="El Encanto de La Laguna">El Encanto de La Laguna</option>
-                <option value="Puerto Los Cabos">Puerto Los Cabos</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="quantity">Quantity</label>
-            <input type="number" id="quantity" formControlName="quantity" required>
-        </div>
-        <div class="form-group">
             <label for="species">Species</label>
             <select id="species" formControlName="species" required>
                 <option value="" selected disabled>Select Species</option>
@@ -37,8 +21,25 @@
                 <option value="Hauchinango">Hauchinango</option>
                 <option value="Others">Others</option>
             </select>
-            <!-- <input type="text" id="species" formControlName="species" required> -->
         </div>
+        <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input type="number" id="quantity" formControlName="quantity" required>
+        </div>
+        <div class="form-group">
+            <label for="location">Location</label>
+            <select id="location" formControlName="location" required>
+                <option value="" selected disabled>Select Location</option>
+                <option value="Los Barriles">Los Barriles</option>
+                <option value="Buena Vista">Buena Vista</option>
+                <option value="La Ribera">La Ribera</option>
+                <option value="Cabo Pulmo">Cabo Pulmo</option>
+                <option value="El Encanto de La Laguna">El Encanto de La Laguna</option>
+                <option value="Puerto Los Cabos">Puerto Los Cabos</option>
+            </select>
+        </div>
+        
+        
         <div class="form-group">
             <label for="bait">Bait</label>
             <select id="bait" formControlName="bait" required>

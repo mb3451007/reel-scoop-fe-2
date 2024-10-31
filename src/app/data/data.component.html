@@ -9,7 +9,7 @@
       <option [value]="'threeWeeksAgo'">3 Weeks Ago</option>
     </select>    
     <div class="button-container">
-      <button class="btn btn-success add-data-button" (click)="addData()">Add New Data</button>
+      <button class="btn btn-success add-data-button" [disabled]="isSuperAdmin" (click)="addData()">Add Fish Report</button>
     </div>
   </div>
   
@@ -17,22 +17,32 @@
     <table>
       <thead>
         <tr>
+          <th *ngIf="isSuperAdmin">Name</th>
+          <th *ngIf="isSuperAdmin">Type</th>
           <th>Location</th>
           <th>Quantity</th>
           <th>Species</th>
           <th>Bait</th>
           <th>Action</th>
+          <th *ngIf="isSuperAdmin">Delete</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of data">
+          <td *ngIf="isSuperAdmin">{{item.userDetails?.first_name}}</td>
+          <td *ngIf="isSuperAdmin">{{item.userDetails?.user_type}}</td>
           <td>{{item.location}}</td>
           <td>{{item.quantity}}</td>
           <td>{{item.species}}</td>
           <td>{{item.bait}}</td>
           <td>
             <button class="btn btn-primary button" (click)="editData(item._id)" [disabled]="!isEditable(item.created_at)">
-              Edit
+              <i class="fas fa-edit"></i>
+            </button>
+          </td>
+          <td *ngIf="isSuperAdmin">
+            <button class="btn btn-danger deleteBtn" (click)="deleteData(item._id)" [disabled]="!isEditable(item.created_at)">
+              <i class="fas fa-trash"></i> 
             </button>
           </td>
         </tr>

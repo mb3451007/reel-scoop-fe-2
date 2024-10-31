@@ -1,4 +1,4 @@
-<div class="form-container" *ngIf="loginMode">
+<div class="form-container" *ngIf="!loginMode && !SuperAdmin">
     <h3 class="form-title">Sign Up</h3>
     <form [formGroup]="signUpForm">
       <div class="form-group">
@@ -31,11 +31,11 @@
       </div>
       <button class="btn-primary" (click)="signUp()">Sign Up</button>
     </form>
-    <p class="form-toggle" (click)="changeMode()">Already have an account? <span class="toggle-link">Login</span></p>
+    <p class="form-toggle" (click)="toggleToLogin()">Already have an account? <span class="toggle-link">Login</span></p>
   </div>
   
   <!-- login -->
-  <div class="form-container" *ngIf="!loginMode">
+  <div class="form-container"  *ngIf="loginMode && !SuperAdmin">
     <h3 class="form-title">Login</h3>
     <form [formGroup]="loginForm">
       <div class="form-group">
@@ -48,6 +48,24 @@
       </div>
       <button class="btn-primary" (click)="login()">Login</button>
     </form>
-    <p class="form-toggle" (click)="changeMode()">Don't have an account? <span class="toggle-link">Sign Up</span></p>
+    <p class="form-toggle" (click)="toggleToSignUp()">Don't have an account? <span class="toggle-link">Sign Up</span></p>
+    <p class="form-toggle" (click)="toggleToAdmin()">Login as a Super Admin? <span class="toggle-link">Login</span></p>
   </div>
+  <!-- Super Admin login -->
+  <div class="form-container" *ngIf="SuperAdmin">
+    <h3 class="form-title">Super Admin Login</h3>
+    <form [formGroup]="adminLoginForm">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" formControlName="AdminEmail" class="form-input" required />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" formControlName="AdminPassword" class="form-input" required />
+      </div>
+      <button class="btn-primary" (click)="superAdminLogin()">Login</button>
+    </form>
+    <p class="form-toggle" (click)="toggleToUserLogin()">Login as User? <span class="toggle-link">Login</span></p>
+  </div>
+  
   

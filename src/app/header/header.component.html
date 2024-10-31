@@ -1,4 +1,4 @@
 <div class="header-container d-flex justify-content-between bg-secondary ps-5 pe-5 align-items-center">
-    <h3 class="user-name">{{userName}}</h3>
+    <h3 class="user-name">{{ adminName ? adminName : userName }}</h3>
     <h3 class="logout" (click)="logOut()">Logout</h3>
 </div>

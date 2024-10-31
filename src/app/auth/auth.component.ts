@@ -12,23 +12,28 @@ import { ToastrService } from 'ngx-toastr';
 export class AuthComponent {
   signUpForm:FormGroup
   loginForm:FormGroup
+  adminLoginForm:FormGroup
   loginMode:boolean = false;
-constructor(private router:Router, private fb:FormBuilder ,private userService:UserService,private toastr: ToastrService){
-  this.signUpForm = this.fb.group({
-    firstName:['', Validators.required],
-    lastName:['', Validators.required],
-    email:['', Validators.required,Validators.email],
-    password:['', Validators.required],
-    userType: ['', Validators.required]
-  })
-  this.loginForm = this.fb.group({
-    email:['',Validators.required , Validators.email],
-    password:['', Validators.required]
-  })
-}
-  changeMode(){
-    this.loginMode = !this.loginMode;
+  SuperAdmin:boolean = false;
+  constructor(private router: Router, private fb: FormBuilder, private userService: UserService, private toastr: ToastrService) {
+    this.signUpForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+      userType: ['', Validators.required]
+    });
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
+    });
+    this.adminLoginForm = this.fb.group({
+      AdminEmail: ['', [Validators.required, Validators.email]],
+      AdminPassword: ['', Validators.required]
+    });
   }
+  
+
   signUp(){
    const userData ={
       first_name: this.signUpForm.value.firstName,
@@ -96,5 +101,65 @@ constructor(private router:Router, private fb:FormBuilder ,private userService:U
       }
     }
    })
+  }
+
+  superAdminLogin(){
+    const adminloginData ={
+      email: this.adminLoginForm.value.AdminEmail,
+      password: this.adminLoginForm.value.AdminPassword,
+    }
+    console.log(adminloginData,'User data to be logged in')
+   this.userService.adminlogin(adminloginData).subscribe({
+    next :(response) =>{
+      console.log('User logged in successfully', response);
+      this.toastr.success('User logged in successfully!');
+      const admin ={
+        userId : response.user._id,
+        userName : 'Super Admin',
+      }
+      this.router.navigate(['/data']);
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('admin',JSON.stringify(admin)  );
+      this.userService.setAdminName('Super Admin');
+    },
+    error: (error) => {
+      console.error('Error:', error)
+      if(error.status === 401){
+        this.toastr.error('Invalid credentials. Please try again.');
+        this.loginForm.reset();
+      }
+      else{
+        this.toastr.error('Error logging in! Please try again.');
+      }
+    }
+   })
+  }
+  changeAdminMode(){
+    this.SuperAdmin != this.SuperAdmin
+  }
+
+  changeMode() {
+    this.loginMode = !this.loginMode;
+    this.SuperAdmin = false; // Reset SuperAdmin when toggling between user modes
+  }
+  
+  toggleToSignUp() {
+    this.loginMode = false;
+    this.SuperAdmin = false;
+  }
+  
+  toggleToLogin() {
+    this.loginMode = true;
+    this.SuperAdmin = false;
+  }
+  
+  toggleToAdmin() {
+    this.SuperAdmin = true;
+    this.loginMode = false;
+  }
+  
+  toggleToUserLogin() {
+    this.SuperAdmin = false;
+    this.loginMode = true;
   }
 }
