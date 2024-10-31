@@ -8,8 +8,8 @@
       <option [value]="'twoWeeksAgo'">2 Weeks Ago</option>
       <option [value]="'threeWeeksAgo'">3 Weeks Ago</option>
     </select>    
-    <div class="button-container">
-      <button class="btn btn-success add-data-button" [disabled]="isSuperAdmin" (click)="addData()">Add Fish Report</button>
+    <div class="button-container" *ngIf="!isSuperAdmin">
+      <button class="btn btn-success add-data-button" (click)="addData()">Add Fish Report</button>
     </div>
   </div>
   

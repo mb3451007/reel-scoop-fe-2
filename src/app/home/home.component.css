@@ -195,10 +195,13 @@ width: 100%;
   margin-top: 1rem;
   /* padding: 15px; */
   /* justify-content: space-between; */
+  display: flex;
   color: white;
   font-weight: 600;
   border-radius: 6px;
   margin-bottom: 1rem;
+  justify-content: left;
+  text-align: left;
 }
 #Hauchinango{
   height: 22px;
@@ -359,9 +362,14 @@ width: 100%;
 
   }
   .perdayfisheslist{
-    margin-right: 3px;
-    margin-left: 3px;
+    /* margin-right: 3px;
+    margin-left: 3px; */
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    width: 100px !important;
   }
+
   .speciesTitle{
     display: block !important;;
   }
