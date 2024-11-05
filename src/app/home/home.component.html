@@ -1,10 +1,10 @@
 <div class="container-fluid">
     <div class="row homeContainer">
         <div class="col-12 backToword d-flex justify-content-between"> 
-            <div class="button-section1">
-                <button class="icon-button" >
-                    <img src="assets/home/left-arrow-svgrepo-com.svg" alt="">
-                </button>
+            <div class="logo-section">
+                
+                    <img src="assets/home/reelscoop_logo.png" alt="">
+                
             </div>
          
         <div class="button-section" *ngIf="!userLoginIn">
@@ -14,8 +14,7 @@
             <button  class="btn add-fish-btn justify-content-end" routerLink="/data">Dashboard</button>
         </div>
     </div>
-    <div class="col-12 somekedogg"><span>SMOKEDOGG</span></div>
-    <div class="col-12 reelScoop"><span>The Reel Scoop</span></div>
+    
     <div class="col-12 dateSep"><span>{{fromDate | date:'MMMM d,y' }}-{{toDate | date:'MMMM d,y'}}</span></div>
     <div class="col-12 fishReport"> 
         <!-- <button>Fish Report Archives</button> -->

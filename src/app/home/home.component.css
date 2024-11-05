@@ -15,22 +15,10 @@
     padding: 5rem 0rem 0rem 0rem;
     color: white;
   }
-  .button-section1 {
-    padding-bottom: 1rem;
-    .icon-button {
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      width: 30px;
-      height: 30px;
-    
-  
-      img {
-        width: 15px;
-        padding-bottom: 4px;
-      }
-    }
-  }
+ .logo-section img{
+  width: 60%;
+  height:100%;
+ }
   .somekedogg {
     span {
       font-size: 13px;
