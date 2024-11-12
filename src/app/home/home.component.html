@@ -1,381 +1,520 @@
 <div class="container-fluid">
-    <div class="row homeContainer">
-        <div class="col-12 backToword d-flex justify-content-between"> 
-            <div class="logo-section">
-                
-                    <img src="assets/home/reelscoop_logo.png" alt="">
-                
-            </div>
-         
-        <div class="button-section" *ngIf="!userLoginIn">
-            <button  class="btn add-fish-btn justify-content-end" routerLink="/data">Login</button>
-        </div>
-        <div class="button-section" *ngIf="userLoginIn">
-            <button  class="btn add-fish-btn justify-content-end" routerLink="/data">Dashboard</button>
-        </div>
+  <div class="row homeContainer">
+    <div class="col-12 backToword d-flex justify-content-between">
+      <div class="logo-section">
+        <img src="assets/home/reelscoop_logo.png" alt="" />
+      </div>
+
+      <div class="button-section" *ngIf="!userLoginIn">
+        <button class="btn add-fish-btn justify-content-end" routerLink="/data">
+          Login
+        </button>
+      </div>
+      <div class="button-section" *ngIf="userLoginIn">
+        <button class="btn add-fish-btn justify-content-end" routerLink="/data">
+          Dashboard
+        </button>
+      </div>
     </div>
-    
-    <div class="col-12 dateSep"><span>{{fromDate | date:'MMMM d,y' }}-{{toDate | date:'MMMM d,y'}}</span></div>
-    <div class="col-12 fishReport"> 
-        <!-- <button>Fish Report Archives</button> -->
+
+    <div class="col-12 dateSep">
+      <span
+        >{{ fromDate | date : "MMMM d,y" }}-{{
+          toDate | date : "MMMM d,y"
+        }}</span
+      >
+    </div>
+    <div class="col-12 fishReport">
+      <div>
         <select (change)="onDateRangeChange($event)">
-            <option [value]="'thisWeek'" selected>This Week</option>
-            <option [value]="'lastWeek'">Last Week</option>
-            <option [value]="'twoWeeksAgo'">2 Weeks Ago</option>
-            <option [value]="'threeWeeksAgo'">3 Weeks Ago</option>
-          </select>
+          <option [value]="'thisWeek'" selected>
+            This Week ({{ dateRanges.thisWeek.from | date : "MMMM d, y" }} -
+            {{ dateRanges.thisWeek.to | date : "MMMM d, y" }})
+          </option>
+          <option [value]="'lastWeek'">
+            Last Week ({{ dateRanges.lastWeek.from | date : "MMMM d, y" }} -
+            {{ dateRanges.lastWeek.to | date : "MMMM d, y" }})
+          </option>
+          <option [value]="'twoWeeksAgo'">
+            2 Weeks Ago ({{
+              dateRanges.twoWeeksAgo.from | date : "MMMM d, y"
+            }}
+            - {{ dateRanges.twoWeeksAgo.to | date : "MMMM d, y" }})
+          </option>
+          <option [value]="'threeWeeksAgo'">
+            3 Weeks Ago ({{
+              dateRanges.threeWeeksAgo.from | date : "MMMM d, y"
+            }}
+            - {{ dateRanges.threeWeeksAgo.to | date : "MMMM d, y" }})
+          </option>
+          <option [value]="'custom_date'">Custom Date</option>
+        </select>
+      </div>
+      <div *ngIf="isCustomDateSelected" class="align-items-center ms-5 d-flex">
+        <label for="customDate">Date: </label>
+        <input
+          type="date"
+          id="customDate"
+          class="ms-2 form-control"
+          [max]="maxCustomDate"
+          (change)="onCustomDateChange($event)"
+        />
+      </div>
     </div>
 
     <div class="col-12 reports">
-        <div class="chart">
-            <div>
-                <img src="assets/icon-20241002T192835Z-001/icon/bell-svgrepo-com.svg" alt="">
-            </div>
-            <div>
-                <div class="examan">EXAMAN</div>
-            <div class="chartReport">Moon Chart</div>
-            </div>
+      <div class="chart">
+        <div>
+          <img
+            src="assets/icon-20241002T192835Z-001/icon/bell-svgrepo-com.svg"
+            alt=""
+          />
         </div>
-        <div class="chart">
-            <div>
-                <img src="assets/icon-20241002T192835Z-001/icon/message-circle-svgrepo-com.svg" alt="">
-            </div>
-            <div>
-                <div class="examan">FORO DE DISCUSION</div>
-            <div class="chartReport">Water Satellite</div>
-            </div>
+        <div>
+          <div class="examan">EXAMAN</div>
+          <div class="chartReport">Moon Chart</div>
         </div>
-        <div class="chart">
-            <div>
-                <img src="assets/icon-20241002T192835Z-001/icon/upload-svgrepo-com.svg" alt="">
-            </div>
-            <div>
-                <div class="examan">SUBIR ARCHIVO</div>
-            <div class="chartReport">Fishing Sports</div>
-            </div>
+      </div>
+      <div class="chart">
+        <div>
+          <img
+            src="assets/icon-20241002T192835Z-001/icon/message-circle-svgrepo-com.svg"
+            alt=""
+          />
         </div>
-        <div class="chart">
-           <div>
-            <img src="assets/icon-20241002T192835Z-001/icon/upload-svgrepo-com.svg" alt="">
+        <div>
+          <div class="examan">FORO DE DISCUSION</div>
+          <div class="chartReport">Water Satellite</div>
         </div>
-           <div>
-            <div class="examan">SUBIR ARCHIVO</div>
-            <div class="chartReport">Report Archives</div>
-           </div>
+      </div>
+      <div class="chart">
+        <div>
+          <img
+            src="assets/icon-20241002T192835Z-001/icon/upload-svgrepo-com.svg"
+            alt=""
+          />
         </div>
+        <div>
+          <div class="examan">SUBIR ARCHIVO</div>
+          <div class="chartReport">Fishing Sports</div>
+        </div>
+      </div>
+      <div class="chart">
+        <div>
+          <img
+            src="assets/icon-20241002T192835Z-001/icon/upload-svgrepo-com.svg"
+            alt=""
+          />
+        </div>
+        <div>
+          <div class="examan">SUBIR ARCHIVO</div>
+          <div class="chartReport">Report Archives</div>
+        </div>
+      </div>
     </div>
-    </div>
+  </div>
 
-<div class="row speciesContainer  ">
-
-    <div class="col-md-8  col-lg-9">
-     <div class="col totals">
+  <div class="row speciesContainer">
+    <div class="col-md-8 col-lg-9">
+      <div class="col totals">
         <span>TOTALS: </span>
-        
-     </div>
+      </div>
 
-      
+      <div class="speciesTitle">
+        <div class="species">
+          <span>SPECIES</span>
+          <img
+            src="assets/icon-20241002T192835Z-001/icon/species_icon.png"
+            alt=""
+          />
+        </div>
 
-           <div class="speciesTitle">
-            <div class="species ">
-                <span>SPECIES</span>
-                <img src="assets/icon-20241002T192835Z-001/icon/species_icon.png" alt="">
+        <div class="speciesData">
+          <div class="fishTitleContent">
+            <div class="d-flex fishTitleContentBox">
+              <span class="fishTitles">TOTAL FISH</span>
+              <span class="fishTitles">CHARTERS</span>
+              <span class="fishTitles">ANGLER</span>
+              <span class="fishTitles">FISH/CHARTER</span>
+              <span class="fishTitles">FISH/ANGLER</span>
             </div>
-
-            <div class="speciesData ">
-               <div class="fishTitleContent" >
-                 <div class="d-flex fishTitleContentBox" > 
-                    <span class="fishTitles">TOTAL FISH</span> 
-                    <span class="fishTitles">CHARTERS</span> 
-                    <span class="fishTitles">ANGLER</span> 
-                    <span class="fishTitles">FISH/CHARTER</span> 
-                    <span class="fishTitles">FISH/ANGLER</span> 
-                </div>
-               <div class="d-flex fishamounts" >
-                <span class="fishTitles text-white" >{{totalFishCount}}</span>
-                <span class="fishTitles text-white" >{{charterFishCount}}</span>
-                <span class="fishTitles text-white" >{{anglerFishCount}}</span>
-                <span class="fishTitles text-white" >{{fish_Charter}}</span>
-                <span class="fishTitles text-white" >{{fish_Angler}}</span>
-               
+            <div class="d-flex fishamounts">
+              <span class="fishTitles text-white">{{ totalFishCount }}</span>
+              <span class="fishTitles text-white">{{ charterFishCount }}</span>
+              <span class="fishTitles text-white">{{ anglerFishCount }}</span>
+              <span class="fishTitles text-white">{{ fish_Charter }}</span>
+              <span class="fishTitles text-white">{{ fish_Angler }}</span>
             </div>
+          </div>
+          <div class="d-flex">
+            <div class="weekDays">
+              <span *ngFor="let week of weeks">{{ week }}</span>
             </div>
-               <div class="d-flex" >
-                <div class="weekDays"><span  *ngFor="let week of weeks">{{week}}</span></div> 
-                <span class="totalWeek">WEEK <br> TOTAL</span>
-            </div>
-            </div>
-           </div>
- 
-          
-            <div class="d-flex perDayWeek " >
-                <span class="fishImgName">
-                    <img id="Hauchinango" src="assets/fish/yellowfin_tuna-removebg-preview.png" alt="">
-                   <p> Yellowfin Tuna</p>
-                </span>
-<!--  -->
-<div class="d-flex" style="width: 100%;">
-    <div class="fishList">
-        <span class="perdayfisheslist" *ngFor="let perDaysFishes of YellowfinTuna">{{ perDaysFishes }}</span>
-    </div> 
-    <span class="totalDays">
-        <span class="countfish" >{{ weeklyFishTotals['Yellowfin Tuna']}}</span>
-    </span>
-</div>
-                
-            </div>  
+            <span class="totalWeek"
+              >WEEK <br />
+              TOTAL</span
+            >
+          </div>
+        </div>
+      </div>
 
-            <div class="d-flex perDayWeek" >
-                <span class="fishImgName">
-                    <img id="Hauchinango" src="assets/fish/dorado-removebg-preview.png" alt="">
-                    <p>Dorado</p>
-                    </span>
+      <div class="d-flex perDayWeek">
+        <span class="fishImgName">
+          <img
+            id="Hauchinango"
+            src="assets/fish/yellowfin_tuna-removebg-preview.png"
+            alt=""
+          />
+          <p>Yellowfin Tuna</p>
+        </span>
+        <!--  -->
+        <div class="d-flex" style="width: 100%">
+          <div class="fishList">
+            <span
+              class="perdayfisheslist"
+              *ngFor="let perDaysFishes of YellowfinTuna"
+              >{{ perDaysFishes }}</span
+            >
+          </div>
+          <span class="totalDays">
+            <span class="countfish">{{
+              weeklyFishTotals["Yellowfin Tuna"]
+            }}</span>
+          </span>
+        </div>
+      </div>
 
-                    <div class="d-flex" style="width: 100%;">
-                        <div class="fishList">
-                            <span class="perdayfisheslist" *ngFor="let perDaysFishes of Dorado">{{ perDaysFishes }}</span>
-                        </div> 
-                        <span class="totalDays">
-                            <span class="countfish" >{{ weeklyFishTotals['Dorado']}}</span>
-                        </span>
-                    </div>
-                 
-            </div> 
+      <div class="d-flex perDayWeek">
+        <span class="fishImgName">
+          <img
+            id="Hauchinango"
+            src="assets/fish/dorado-removebg-preview.png"
+            alt=""
+          />
+          <p>Dorado</p>
+        </span>
 
-            <div class="d-flex perDayWeek" >
-                <span class="fishImgName">
-                    <img id="Hauchinango" src="assets/fish/sailfish_2-removebg-preview.png" alt="">
-                    <p>Sailfish</p>
-                </span>
+        <div class="d-flex" style="width: 100%">
+          <div class="fishList">
+            <span
+              class="perdayfisheslist"
+              *ngFor="let perDaysFishes of Dorado"
+              >{{ perDaysFishes }}</span
+            >
+          </div>
+          <span class="totalDays">
+            <span class="countfish">{{ weeklyFishTotals["Dorado"] }}</span>
+          </span>
+        </div>
+      </div>
 
-                <div class="d-flex" style="width: 100%;">
-                    <div class="fishList">
-                        <span class="perdayfisheslist" *ngFor="let perDaysFishes of Sailfish">{{ perDaysFishes }}</span>
-                    </div> 
-                    <span class="totalDays">
-                        <span class="countfish" >{{ weeklyFishTotals['Sailfish']}}</span>
-                    </span>
-                </div>
-               
-            </div> 
+      <div class="d-flex perDayWeek">
+        <span class="fishImgName">
+          <img
+            id="Hauchinango"
+            src="assets/fish/sailfish_2-removebg-preview.png"
+            alt=""
+          />
+          <p>Sailfish</p>
+        </span>
 
-            <div class="d-flex perDayWeek" >
-                <span class="fishImgName">
-                    <img id="Hauchinango" src="assets/fish/striped_marlin-removebg-preview.png" alt="">
-                   <p> Striped Marlin</p>
-                </span>
+        <div class="d-flex" style="width: 100%">
+          <div class="fishList">
+            <span
+              class="perdayfisheslist"
+              *ngFor="let perDaysFishes of Sailfish"
+              >{{ perDaysFishes }}</span
+            >
+          </div>
+          <span class="totalDays">
+            <span class="countfish">{{ weeklyFishTotals["Sailfish"] }}</span>
+          </span>
+        </div>
+      </div>
 
-                <div class="d-flex" style="width: 100%;">
-                    <div class="fishList">
-                        <span class="perdayfisheslist" *ngFor="let perDaysFishes of StripedMarlin">{{ perDaysFishes }}</span>
-                    </div> 
-                    <span class="totalDays">
-                        <span class="countfish" >{{ weeklyFishTotals['Striped Marlin']}}</span>
-                    </span>
-                </div>
-                
-            </div> 
+      <div class="d-flex perDayWeek">
+        <span class="fishImgName">
+          <img
+            id="Hauchinango"
+            src="assets/fish/striped_marlin-removebg-preview.png"
+            alt=""
+          />
+          <p>Striped Marlin</p>
+        </span>
 
-            <div class="d-flex perDayWeek" >
-                <span class="fishImgName">
-                    <img id="Hauchinango" src="assets/fish/blue_marlin-removebg-preview.png" alt="">
-                    <p>Blue Marlin</p>
-                </span>
-                <div class="d-flex" style="width: 100%;">
-                    <div class="fishList">
-                        <span class="perdayfisheslist" *ngFor="let perDaysFishes of BlueMarlin">{{ perDaysFishes }}</span>
-                    </div> 
-                    <span class="totalDays">
-                        <span class="countfish" >{{ weeklyFishTotals['Blue Marlin']}}</span>
-                    </span>
-                </div>
-               
-            </div> 
+        <div class="d-flex" style="width: 100%">
+          <div class="fishList">
+            <span
+              class="perdayfisheslist"
+              *ngFor="let perDaysFishes of StripedMarlin"
+              >{{ perDaysFishes }}</span
+            >
+          </div>
+          <span class="totalDays">
+            <span class="countfish">{{
+              weeklyFishTotals["Striped Marlin"]
+            }}</span>
+          </span>
+        </div>
+      </div>
 
-            <div class="d-flex perDayWeek" >
-                <span class="fishImgName">
-                    <img id="Hauchinango" src="assets/fish/Black_Marlin-removebg-preview.png" alt="">
-                   <p> Black Marlin</p>
-                </span>
+      <div class="d-flex perDayWeek">
+        <span class="fishImgName">
+          <img
+            id="Hauchinango"
+            src="assets/fish/blue_marlin-removebg-preview.png"
+            alt=""
+          />
+          <p>Blue Marlin</p>
+        </span>
+        <div class="d-flex" style="width: 100%">
+          <div class="fishList">
+            <span
+              class="perdayfisheslist"
+              *ngFor="let perDaysFishes of BlueMarlin"
+              >{{ perDaysFishes }}</span
+            >
+          </div>
+          <span class="totalDays">
+            <span class="countfish">{{ weeklyFishTotals["Blue Marlin"] }}</span>
+          </span>
+        </div>
+      </div>
 
-                <div class="d-flex" style="width: 100%;">
-                    <div class="fishList">
-                        <span class="perdayfisheslist" *ngFor="let perDaysFishes of BlackMarlin">{{ perDaysFishes }}</span>
-                    </div> 
-                    <span class="totalDays">
-                        <span class="countfish" >{{ weeklyFishTotals['Black Marlin']}}</span>
-                    </span>
-                </div>
+      <div class="d-flex perDayWeek">
+        <span class="fishImgName">
+          <img
+            id="Hauchinango"
+            src="assets/fish/Black_Marlin-removebg-preview.png"
+            alt=""
+          />
+          <p>Black Marlin</p>
+        </span>
 
-               
-            </div> 
+        <div class="d-flex" style="width: 100%">
+          <div class="fishList">
+            <span
+              class="perdayfisheslist"
+              *ngFor="let perDaysFishes of BlackMarlin"
+              >{{ perDaysFishes }}</span
+            >
+          </div>
+          <span class="totalDays">
+            <span class="countfish">{{
+              weeklyFishTotals["Black Marlin"]
+            }}</span>
+          </span>
+        </div>
+      </div>
 
+      <div class="d-flex perDayWeek">
+        <span class="fishImgName">
+          <img
+            id="Hauchinango"
+            src="assets/fish/wahoo_2-removebg-preview.png"
+            alt=""
+          />
+          <p>Wahoo</p>
+        </span>
 
-            <div class="d-flex perDayWeek" >
-                <span class="fishImgName">
-                    <img id="Hauchinango" src="assets/fish/wahoo_2-removebg-preview.png" alt="">
-                    <p>Wahoo</p>
-                </span>
+        <div class="d-flex" style="width: 100%">
+          <div class="fishList">
+            <span
+              class="perdayfisheslist"
+              *ngFor="let perDaysFishes of Wahoo"
+              >{{ perDaysFishes }}</span
+            >
+          </div>
+          <span class="totalDays">
+            <span class="countfish">{{ weeklyFishTotals["Wahoo"] }}</span>
+          </span>
+        </div>
+      </div>
 
-                <div class="d-flex" style="width: 100%;">
-                    <div class="fishList">
-                        <span class="perdayfisheslist" *ngFor="let perDaysFishes of Wahoo">{{ perDaysFishes }}</span>
-                    </div> 
-                    <span class="totalDays">
-                        <span class="countfish" >{{ weeklyFishTotals['Wahoo']}}</span>
-                    </span>
-                </div>
+      <div class="d-flex perDayWeek">
+        <span class="fishImgName">
+          <img
+            id="Hauchinango"
+            src="assets/fish/yellowtail-removebg-preview.png"
+            alt=""
+          />
+          <p>Yellowtail</p>
+        </span>
 
-                
-            </div> 
+        <div class="d-flex" style="width: 100%">
+          <div class="fishList">
+            <span
+              class="perdayfisheslist"
+              *ngFor="let perDaysFishes of yellowtail"
+              >{{ perDaysFishes }}</span
+            >
+          </div>
+          <span class="totalDays">
+            <span class="countfish">{{ weeklyFishTotals["Yellowtail"] }}</span>
+          </span>
+        </div>
+      </div>
 
+      <div class="d-flex perDayWeek">
+        <span class="fishImgName">
+          <img
+            id="Hauchinango"
+            src="assets/fish/roosterfish-removebg-preview.png"
+            alt=""
+          />
+          <p>Roosterfish</p>
+        </span>
 
-            <div class="d-flex perDayWeek" >
-                <span class="fishImgName">
-                    <img id="Hauchinango" src="assets/fish/yellowtail-removebg-preview.png" alt="">
-                    <p>Yellowtail</p>
-                </span>
+        <div class="d-flex" style="width: 100%">
+          <div class="fishList">
+            <span
+              class="perdayfisheslist"
+              *ngFor="let perDaysFishes of Roosterfish"
+              >{{ perDaysFishes }}</span
+            >
+          </div>
+          <span class="totalDays">
+            <span class="countfish">{{ weeklyFishTotals["Roosterfish"] }}</span>
+          </span>
+        </div>
+      </div>
 
-                <div class="d-flex" style="width: 100%;">
-                    <div class="fishList">
-                        <span class="perdayfisheslist" *ngFor="let perDaysFishes of yellowtail">{{ perDaysFishes }}</span>
-                    </div> 
-                    <span class="totalDays">
-                        <span class="countfish" >{{ weeklyFishTotals['Yellowtail']}}</span>
-                    </span>
-                </div>
+      <div class="d-flex perDayWeek">
+        <span class="fishImgName">
+          <img
+            id="Hauchinango"
+            src="assets/fish/pargo-removebg-preview.png"
+            alt=""
+          />
+          <p>Pargo</p>
+        </span>
 
-               
-            </div> 
+        <div class="d-flex" style="width: 100%">
+          <div class="fishList">
+            <span
+              class="perdayfisheslist"
+              *ngFor="let perDaysFishes of Pargo"
+              >{{ perDaysFishes }}</span
+            >
+          </div>
+          <span class="totalDays">
+            <span class="countfish">{{ weeklyFishTotals["Pargo"] }}</span>
+          </span>
+        </div>
+      </div>
 
+      <div class="d-flex perDayWeek">
+        <span class="fishImgName">
+          <img
+            id="Hauchinango"
+            src="assets/fish/cabrilla-removebg-preview.png"
+            alt=""
+          />
+          <p>Cabrilla</p>
+        </span>
+        <div class="d-flex" style="width: 100%">
+          <div class="fishList">
+            <span
+              class="perdayfisheslist"
+              *ngFor="let perDaysFishes of Cabrilla"
+              >{{ perDaysFishes }}</span
+            >
+          </div>
+          <span class="totalDays">
+            <span class="countfish">{{ weeklyFishTotals["Cabrilla"] }}</span>
+          </span>
+        </div>
+      </div>
 
-            <div class="d-flex perDayWeek" >
-                <span class="fishImgName">
-                    <img id="Hauchinango" src="assets/fish/roosterfish-removebg-preview.png" alt="">
-                    <p>Roosterfish</p>
-                </span>
+      <div class="d-flex perDayWeek">
+        <span class="fishImgName">
+          <img
+            id="Hauchinango"
+            src="assets/fish/triggerfish-removebg-preview.png"
+            alt=""
+          />
+          <p>Triggerfish</p>
+        </span>
 
-                <div class="d-flex" style="width: 100%;">
-                    <div class="fishList">
-                        <span class="perdayfisheslist" *ngFor="let perDaysFishes of Roosterfish">{{ perDaysFishes }}</span>
-                    </div> 
-                    <span class="totalDays">
-                        <span class="countfish" >{{ weeklyFishTotals['Roosterfish']}}</span>
-                    </span>
-                </div>
+        <div class="d-flex" style="width: 100%">
+          <div class="fishList">
+            <span
+              class="perdayfisheslist"
+              *ngFor="let perDaysFishes of Triggerfish"
+              >{{ perDaysFishes }}</span
+            >
+          </div>
+          <span class="totalDays">
+            <span class="countfish">{{ weeklyFishTotals["Triggerfish"] }}</span>
+          </span>
+        </div>
+      </div>
 
-               
-            </div> 
+      <div class="d-flex perDayWeek">
+        <span class="fishImgName">
+          <img
+            id="Hauchinango"
+            src="assets/fish/huachinango-removebg-preview.png"
+            alt=""
+          />
+          <p>Hauchinango</p>
+        </span>
 
+        <div class="d-flex" style="width: 100%">
+          <div class="fishList">
+            <span
+              class="perdayfisheslist"
+              *ngFor="let perDaysFishes of Hauchinango"
+              >{{ perDaysFishes }}</span
+            >
+          </div>
+          <span class="totalDays">
+            <span class="countfish">{{ weeklyFishTotals["Hauchinango"] }}</span>
+          </span>
+        </div>
+      </div>
 
-            <div class="d-flex perDayWeek" >
-                <span class="fishImgName">
-                    <img id="Hauchinango" src="assets/fish/pargo-removebg-preview.png" alt="">
-                   <p> Pargo</p>
-                </span>
+      <div class="d-flex perDayWeek">
+        <span class="fishImgName">
+          <!-- <img id="Hauchinango" src="" alt=""> -->
+          <p>Others</p>
+        </span>
 
-                <div class="d-flex" style="width: 100%;">
-                    <div class="fishList">
-                        <span class="perdayfisheslist" *ngFor="let perDaysFishes of Pargo">{{ perDaysFishes }}</span>
-                    </div> 
-                    <span class="totalDays">
-                        <span class="countfish" >{{ weeklyFishTotals['Pargo']}}</span>
-                    </span>
-                </div>
-
-               
-            </div> 
-
-
-            <div class="d-flex perDayWeek" >
-                <span class="fishImgName">
-                    <img id="Hauchinango" src="assets/fish/cabrilla-removebg-preview.png" alt="">
-                    <p>Cabrilla</p>
-                    </span>
-                    <div class="d-flex" style="width: 100%;">
-                        <div class="fishList">
-                            <span class="perdayfisheslist" *ngFor="let perDaysFishes of Cabrilla">{{ perDaysFishes }}</span>
-                        </div> 
-                        <span class="totalDays">
-                            <span class="countfish" >{{ weeklyFishTotals['Cabrilla']}}</span>
-                        </span>
-                    </div>
-
-                    
-            </div> 
-
-
-            <div class="d-flex perDayWeek" >
-                <span class="fishImgName">
-                    <img id="Hauchinango" src="assets/fish/triggerfish-removebg-preview.png" alt="">
-                    <p>Triggerfish</p>
-                </span>
-
-                <div class="d-flex" style="width: 100%;">
-                    <div class="fishList">
-                        <span class="perdayfisheslist" *ngFor="let perDaysFishes of Triggerfish">{{ perDaysFishes }}</span>
-                    </div> 
-                    <span class="totalDays">
-                        <span class="countfish" >{{ weeklyFishTotals['Triggerfish']}}</span>
-                    </span>
-                </div>
-
-                
-            </div> 
-
-
-            <div class="d-flex perDayWeek" >
-                <span class="fishImgName">
-                    <img  id="Hauchinango" src="assets/fish/huachinango-removebg-preview.png" alt="">
-                    <p>Hauchinango</p>
-                </span>
-
-                <div class="d-flex" style="width: 100%;">
-                    <div class="fishList">
-                        <span class="perdayfisheslist" *ngFor="let perDaysFishes of Hauchinango">{{ perDaysFishes }}</span>
-                    </div> 
-                    <span class="totalDays">
-                        <span class="countfish" >{{ weeklyFishTotals['Hauchinango']}}</span>
-                    </span>
-                </div>
-
-            </div> 
-
-
-            <div class="d-flex perDayWeek" >
-                <span class="fishImgName">
-                    <!-- <img id="Hauchinango" src="" alt=""> -->
-                    <p>Others</p>
-                </span>
-
-                <div class="d-flex" style="width: 100%;">
-                    <div class="fishList">
-                        <span class="perdayfisheslist" *ngFor="let perDaysFishes of Others">{{ perDaysFishes }}</span>
-                    </div> 
-                    <span class="totalDays">
-                        <span class="countfish" >{{ weeklyFishTotals['Others']}}</span>
-                    </span>
-                </div>
-
-               
-            </div> 
+        <div class="d-flex" style="width: 100%">
+          <div class="fishList">
+            <span
+              class="perdayfisheslist"
+              *ngFor="let perDaysFishes of Others"
+              >{{ perDaysFishes }}</span
+            >
+          </div>
+          <span class="totalDays">
+            <span class="countfish">{{ weeklyFishTotals["Others"] }}</span>
+          </span>
+        </div>
+      </div>
     </div>
-    
+
     <div class="col-md-4 col-lg-3 somekedoggRightSide">
-        <div class=" addsByCompany"> 
-            <img src="assets/icon-20241002T192835Z-001/icon/smokey_icon.png" alt="">
-            <span>SMOKEDOGG SAYS</span>
-        </div>
-        <div class=" addsByCompany">
-            <img src="assets/icon-20241002T192835Z-001/icon/trustedsources.png" alt="">
-            <span>TRUSTED SOURCES</span>
-        </div>
-        <div class=" addsByCompany">
-           <img src="assets/icon-20241002T192835Z-001/icon/pub_forum.png" alt="">     
-            <span>PUBLIC FORUM</span>
-        </div>
-        <!-- <div class=" addsByCompany"><span>Photo Gallery</span></div> -->
-
+      <div class="addsByCompany">
+        <img
+          src="assets/icon-20241002T192835Z-001/icon/smokey_icon.png"
+          alt=""
+        />
+        <span>SMOKEDOGG SAYS</span>
+      </div>
+      <div class="addsByCompany">
+        <img
+          src="assets/icon-20241002T192835Z-001/icon/trustedsources.png"
+          alt=""
+        />
+        <span>TRUSTED SOURCES</span>
+      </div>
+      <div class="addsByCompany">
+        <img src="assets/icon-20241002T192835Z-001/icon/pub_forum.png" alt="" />
+        <span>PUBLIC FORUM</span>
+      </div>
+      <!-- <div class=" addsByCompany"><span>Photo Gallery</span></div> -->
     </div>
-</div>
+  </div>
 </div>

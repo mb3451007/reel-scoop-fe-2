@@ -1,18 +1,50 @@
 <app-header></app-header>
 <div class="table-container">
-  <h2 class="caption">Fishing Details</h2>
+  <div class="d-flex align-items-center mb-4 justify-content-between">
+    <i
+      routerLink="/home"
+      class="custom-icon fas fa-2x fa-home"
+      style="color: #6a67ce"
+    ></i>
+    <h2 class="caption m-0 p-0 mx-auto">Fishing Details</h2>
+  </div>
   <div class="select-and-button-container">
-    <select class="custom-select" (change)="onDateRangeChange($event)">
-      <option [value]="'thisWeek'" selected>This Week</option>
-      <option [value]="'lastWeek'">Last Week</option>
-      <option [value]="'twoWeeksAgo'">2 Weeks Ago</option>
-      <option [value]="'threeWeeksAgo'">3 Weeks Ago</option>
-    </select>    
+    <select (change)="onDateRangeChange($event)">
+      <option [value]="'thisWeek'" selected>
+        This Week ({{ dateRanges.thisWeek.from | date : "MMMM d, y" }} -
+        {{ dateRanges.thisWeek.to | date : "MMMM d, y" }})
+      </option>
+      <option [value]="'lastWeek'">
+        Last Week ({{ dateRanges.lastWeek.from | date : "MMMM d, y" }} -
+        {{ dateRanges.lastWeek.to | date : "MMMM d, y" }})
+      </option>
+      <option [value]="'twoWeeksAgo'">
+        2 Weeks Ago ({{ dateRanges.twoWeeksAgo.from | date : "MMMM d, y" }} -
+        {{ dateRanges.twoWeeksAgo.to | date : "MMMM d, y" }})
+      </option>
+      <option [value]="'threeWeeksAgo'">
+        3 Weeks Ago ({{ dateRanges.threeWeeksAgo.from | date : "MMMM d, y" }} -
+        {{ dateRanges.threeWeeksAgo.to | date : "MMMM d, y" }})
+      </option>
+      <option [value]="'custom_date'">Custom Date</option>
+    </select>
+    <div *ngIf="isCustomDateSelected" class="align-items-center d-flex">
+      <label for="customDate">Date: </label>
+      <input
+        type="date"
+        id="customDate"
+        class="ms-2 form-control"
+        [max]="maxCustomDate"
+        (change)="onCustomDateChange($event)"
+      />
+    </div>
     <div class="button-container" *ngIf="!isSuperAdmin">
-      <button class="btn btn-success add-data-button" (click)="addData()">Add Fish Report</button>
+      <button class="btn btn-success add-data-button" (click)="addData()">
+        Add Fish Report
+      </button>
     </div>
   </div>
-  
+
   <div class="table-responsive">
     <table>
       <thead>
@@ -29,20 +61,28 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of data">
-          <td *ngIf="isSuperAdmin">{{item.userDetails?.first_name}}</td>
-          <td *ngIf="isSuperAdmin">{{item.userDetails?.user_type}}</td>
-          <td>{{item.location}}</td>
-          <td>{{item.quantity}}</td>
-          <td>{{item.species}}</td>
-          <td>{{item.bait}}</td>
+          <td *ngIf="isSuperAdmin">{{ item.userDetails?.first_name }}</td>
+          <td *ngIf="isSuperAdmin">{{ item.userDetails?.user_type }}</td>
+          <td>{{ item.location }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.species }}</td>
+          <td>{{ item.bait }}</td>
           <td>
-            <button class="btn btn-primary button" (click)="editData(item._id)" [disabled]="!isEditable(item.created_at)">
+            <button
+              class="btn btn-primary button"
+              (click)="editData(item._id)"
+              [disabled]="!isEditable(item.created_at)"
+            >
               <i class="fas fa-edit"></i>
             </button>
           </td>
           <td *ngIf="isSuperAdmin">
-            <button class="btn btn-danger deleteBtn" (click)="deleteData(item._id)" [disabled]="!isEditable(item.created_at)">
-              <i class="fas fa-trash"></i> 
+            <button
+              class="btn btn-danger deleteBtn"
+              (click)="deleteData(item._id)"
+              [disabled]="!isEditable(item.created_at)"
+            >
+              <i class="fas fa-trash"></i>
             </button>
           </td>
         </tr>
@@ -51,18 +91,39 @@
   </div>
 
   <div class="pagination-container">
-    <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon" viewBox="0 0 512 512" (click)="changePage(currentPage - 1)">
-      <path fill="#6a67ce" d="M459.5 440.6c9.5 7.9 22.8 9.7 34.1 4.4s18.4-16.6 18.4-29l0-320c0-12.4-7.2-23.7-18.4-29s-24.5-3.6-34.1 4.4L288 214.3l0 41.7 0 41.7L459.5 440.6zM256 352l0-96 0-128 0-32c0-12.4-7.2-23.7-18.4-29s-24.5-3.6-34.1 4.4l-192 160C4.2 237.5 0 246.5 0 256s4.2 18.5 11.5 24.6l192 160c9.5 7.9 22.8 9.7 34.1 4.4s18.4-16.6 18.4-29l0-64z"/>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="svg-icon"
+      viewBox="0 0 512 512"
+      (click)="changePage(currentPage - 1)"
+    >
+      <path
+        fill="#6a67ce"
+        d="M459.5 440.6c9.5 7.9 22.8 9.7 34.1 4.4s18.4-16.6 18.4-29l0-320c0-12.4-7.2-23.7-18.4-29s-24.5-3.6-34.1 4.4L288 214.3l0 41.7 0 41.7L459.5 440.6zM256 352l0-96 0-128 0-32c0-12.4-7.2-23.7-18.4-29s-24.5-3.6-34.1 4.4l-192 160C4.2 237.5 0 246.5 0 256s4.2 18.5 11.5 24.6l192 160c9.5 7.9 22.8 9.7 34.1 4.4s18.4-16.6 18.4-29l0-64z"
+      />
     </svg>
 
     <ng-container *ngIf="totalPages > 1">
-      <button class="pagination-button" *ngFor="let page of pages" (click)="changePage(page)" [class.active]="currentPage === page">
+      <button
+        class="pagination-button"
+        *ngFor="let page of pages"
+        (click)="changePage(page)"
+        [class.active]="currentPage === page"
+      >
         {{ page }}
       </button>
     </ng-container>
 
-    <svg xmlns="http://www.w3.org/2000/svg" class="svg-icon" viewBox="0 0 512 512" (click)="changePage(currentPage + 1)">
-      <path fill="#6a67ce" d="M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416L0 96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4L224 214.3l0 41.7 0 41.7L52.5 440.6zM256 352l0-96 0-128 0-32c0-12.4-7.2-23.7-18.4-29s24.5-3.6 34.1 4.4l192 160c7.3 6.1 11.5 15.1 11.5 24.6s-4.2 18.5-11.5 24.6l-192 160c-9.5 7.9-22.8 9.7-34.1 4.4s-18.4-16.6-18.4-29l0-64z"/>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="svg-icon"
+      viewBox="0 0 512 512"
+      (click)="changePage(currentPage + 1)"
+    >
+      <path
+        fill="#6a67ce"
+        d="M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416L0 96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4L224 214.3l0 41.7 0 41.7L52.5 440.6zM256 352l0-96 0-128 0-32c0-12.4-7.2-23.7-18.4-29s24.5-3.6 34.1 4.4l192 160c7.3 6.1 11.5 15.1 11.5 24.6s-4.2 18.5-11.5 24.6l-192 160c-9.5 7.9-22.8 9.7-34.1 4.4s-18.4-16.6-18.4-29l0-64z"
+      />
     </svg>
   </div>
 </div>

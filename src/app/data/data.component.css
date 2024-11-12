@@ -1,5 +1,5 @@
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   background-color: #f7f9fc;
   display: flex;
   justify-content: center;
@@ -33,7 +33,7 @@ body {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 10px;
+  /* gap: 10px; */
   margin-bottom: 20px;
 }
 
@@ -64,7 +64,6 @@ button.add-data-button:hover {
 }
 
 .deleteBtn:hover {
-
   background-color: rgb(128, 2, 2) !important;
 }
 
@@ -176,10 +175,10 @@ th {
 
 .button:hover {
   background-color: #4c48a4;
-  ;
 }
 
-
+.custom-icon {
+  cursor: pointer;
+}
 
 /*  */
-

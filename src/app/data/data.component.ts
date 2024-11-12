@@ -5,7 +5,7 @@ import { DataService } from '../data.service';
 @Component({
   selector: 'app-data',
   templateUrl: './data.component.html',
-  styleUrls: ['./data.component.css']
+  styleUrls: ['./data.component.css'],
 })
 export class DataComponent implements OnInit {
   data: any[] = [];
@@ -17,22 +17,36 @@ export class DataComponent implements OnInit {
   toDate: string = '';
   isSuperAdmin: boolean = false;
   isAdmin: boolean = false;
+  dateRanges: any = {};
+  isCustomDateSelected: boolean = false;
+  maxCustomDate: string;
 
-  constructor(private router: Router, private dataService: DataService) { }
+  constructor(private router: Router, private dataService: DataService) {
+    this.maxCustomDate = this.getCurrentDate();
+  }
 
   ngOnInit(): void {
-  
     this.setDateRange('thisWeek');
+    this.setDateRange('lastWeek');
+    this.setDateRange('twoWeeksAgo');
+    this.setDateRange('threeWeeksAgo');
     this.getData();
     this.checkAdmin();
   }
+  getCurrentDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Get month in 2 digits
+    const day = today.getDate().toString().padStart(2, '0'); // Get day in 2 digits
+    return `${year}-${month}-${day}`;
+  }
 
-  checkAdmin(){
+  checkAdmin() {
     const user = JSON.parse(localStorage.getItem('User') || '{}');
     const admin = localStorage.getItem('admin');
     console.log(user, 'user');
     console.log(admin, 'admin');
-  
+
     if (user && admin) {
       // If both user and admin are present in localStorage
       this.isSuperAdmin = true;
@@ -47,14 +61,18 @@ export class DataComponent implements OnInit {
       this.isAdmin = false;
     }
   }
-  
+
   onDateRangeChange(event: any): void {
     const selectedValue = event.target.value;
+    if (selectedValue === 'custom_date') {
+      this.isCustomDateSelected = true;
+      return;
+    }
     this.setDateRange(selectedValue);
     this.getData();
   }
 
-  setDateRange(range: string): void {
+  setDateRange(range: string, customDate?: string): void {
     const today = new Date();
     let startOfWeek, endOfWeek;
     const dayOfWeek = today.getDay();
@@ -68,6 +86,7 @@ export class DataComponent implements OnInit {
         endOfWeek.setDate(startOfWeek.getDate() + 6);
         this.fromDate = startOfWeek.toISOString().split('T')[0];
         this.toDate = endOfWeek.toISOString().split('T')[0];
+        this.dateRanges['thisWeek'] = { from: this.fromDate, to: this.toDate };
         break;
 
       case 'lastWeek':
@@ -77,6 +96,7 @@ export class DataComponent implements OnInit {
         endOfWeek.setDate(startOfWeek.getDate() + 6);
         this.fromDate = startOfWeek.toISOString().split('T')[0];
         this.toDate = endOfWeek.toISOString().split('T')[0];
+        this.dateRanges['lastWeek'] = { from: this.fromDate, to: this.toDate };
         break;
 
       case 'twoWeeksAgo':
@@ -86,6 +106,10 @@ export class DataComponent implements OnInit {
         endOfWeek.setDate(startOfWeek.getDate() + 6);
         this.fromDate = startOfWeek.toISOString().split('T')[0];
         this.toDate = endOfWeek.toISOString().split('T')[0];
+        this.dateRanges['twoWeeksAgo'] = {
+          from: this.fromDate,
+          to: this.toDate,
+        };
         break;
 
       case 'threeWeeksAgo':
@@ -95,6 +119,30 @@ export class DataComponent implements OnInit {
         endOfWeek.setDate(startOfWeek.getDate() + 6);
         this.fromDate = startOfWeek.toISOString().split('T')[0];
         this.toDate = endOfWeek.toISOString().split('T')[0];
+        this.dateRanges['threeWeeksAgo'] = {
+          from: this.fromDate,
+          to: this.toDate,
+        };
+        break;
+
+      case 'custom-date':
+        if (customDate) {
+          const selectedDate = new Date(customDate); // Convert the string to a Date object
+
+          // Calculate the previous Monday relative to the selected date
+          const dayOfWeek = selectedDate.getDay();
+          const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+          const previousMonday = new Date(selectedDate);
+          previousMonday.setDate(selectedDate.getDate() + diffToMonday);
+
+          // Calculate the upcoming Sunday after the previous Monday
+          const upcomingSunday = new Date(previousMonday);
+          upcomingSunday.setDate(previousMonday.getDate() + 6);
+
+          // Set fromDate and toDate
+          this.fromDate = previousMonday.toISOString().split('T')[0];
+          this.toDate = upcomingSunday.toISOString().split('T')[0];
+        }
         break;
 
       default:
@@ -103,50 +151,59 @@ export class DataComponent implements OnInit {
     }
   }
 
+  onCustomDateChange(event: any): void {
+    const customDate = event.target.value; // Get the selected date from the input
+    this.setDateRange('custom-date', customDate); // Pass the selected date to the function
+    this.getData(); // Fetch data after the date range is set
+    console.log('Custom date selected:', customDate);
+  }
   addData() {
     this.router.navigate(['/add-data']);
   }
 
   getData(): void {
-    console.log(this.isSuperAdmin)
-    console.log(this.isAdmin)
+    console.log(this.isSuperAdmin);
+    console.log(this.isAdmin);
     const user = JSON.parse(localStorage.getItem('User') || '{}');
     const admin = JSON.parse(localStorage.getItem('admin') || '{}');
 
     if (user && user.userId) {
       const userId = user.userId;
       // Call getData for regular users
-      this.dataService.getData(this.currentPage, userId, this.fromDate, this.toDate).subscribe({
-        next: (response) => {
-          this.data = response.data;
-          this.totalPages = Math.ceil(response.totalDataCount / this.limit);
-          this.generatePageNumbers();
-          console.log('Data fetch for user:', this.data);
-          console.log('Response:', response);
-        },
-        error: (error) => {
-          console.error('Error fetching user data:', error);
-        }
-      });
+      this.dataService
+        .getData(this.currentPage, userId, this.fromDate, this.toDate)
+        .subscribe({
+          next: (response) => {
+            this.data = response.data;
+            this.totalPages = Math.ceil(response.totalDataCount / this.limit);
+            this.generatePageNumbers();
+            console.log('Data fetch for user:', this.data);
+            console.log('Response:', response);
+          },
+          error: (error) => {
+            console.error('Error fetching user data:', error);
+          },
+        });
     } else if (admin) {
       // Call getAllUsersData for admins
-      this.dataService.getAllUsersData(this.currentPage, this.fromDate, this.toDate).subscribe({
-        next: (response) => {
-          this.data = response.data;
-          this.totalPages = Math.ceil(response.totalDataCount / this.limit);
-          this.generatePageNumbers();
-          console.log('Data fetch for admin:', this.data);
-          console.log('Response:', response);
-        },
-        error: (error) => {
-          console.error('Error fetching admin data:', error);
-        }
-      });
+      this.dataService
+        .getAllUsersData(this.currentPage, this.fromDate, this.toDate)
+        .subscribe({
+          next: (response) => {
+            this.data = response.data;
+            this.totalPages = Math.ceil(response.totalDataCount / this.limit);
+            this.generatePageNumbers();
+            console.log('Data fetch for admin:', this.data);
+            console.log('Response:', response);
+          },
+          error: (error) => {
+            console.error('Error fetching admin data:', error);
+          },
+        });
     } else {
       console.warn('No user or admin found in local storage.');
     }
   }
-
 
   changePage(page: number): void {
     if (page > 0 && page <= this.totalPages) {
@@ -158,7 +215,7 @@ export class DataComponent implements OnInit {
   private generatePageNumbers(): void {
     this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
-  // 
+  //
 
   isEditable(date: string): boolean {
     const recordDate = new Date(date);
@@ -183,16 +240,15 @@ export class DataComponent implements OnInit {
     return recordDate >= startOfWeek && recordDate <= endOfWeek;
   }
 
-
   editData(itemId: any): void {
-    console.log(itemId)
+    console.log(itemId);
     // if (this.isEditable(itemId.date)) {
 
     this.router.navigate(['edit-data', itemId]);
     // }
   }
   deleteData(itemId: any): void {
-    console.log(itemId , 'item Id')
+    console.log(itemId, 'item Id');
     if (confirm('Are you sure you want to delete this record?')) {
       this.dataService.deleteData(itemId).subscribe({
         next: () => {
@@ -201,7 +257,7 @@ export class DataComponent implements OnInit {
         },
         error: (error: any) => {
           console.error('Error deleting record:', error);
-        }
+        },
       });
     }
   }
