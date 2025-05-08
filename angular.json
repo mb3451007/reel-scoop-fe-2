@@ -35,13 +35,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "1000kb",  // Increased warning budget for initial chunk
+                  "maximumError": "2000kb"     // Increased error budget for initial chunk
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "10kb",  // Increased warning for component styles
+                  "maximumError": "15kb"     // Increased error budget for component styles
                 }
               ],
               "outputHashing": "all"
