@@ -96,6 +96,8 @@ export class HomeComponent implements OnInit {
   dateRanges: any = {};
   isCustomDateSelected: boolean = false;
   maxCustomDate: string;
+  isLoading: boolean = false;
+
   constructor(private dataService: DataService) {
     this.maxCustomDate = this.getCurrentDate();
     this.fishTypes.forEach((fish) => {
@@ -113,36 +115,90 @@ export class HomeComponent implements OnInit {
     this.initializeFishData();
   }
 
-  getCurrentDate(): string {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Get month in 2 digits
-    const day = today.getDate().toString().padStart(2, '0'); // Get day in 2 digits
-    return `${year}-${month}-${day}`;
-  }
   ngOnInit(): void {
     const user = localStorage.getItem('User');
     if (user) {
       this.userLoggedIn = JSON.parse(user);
     }
-    console.log('user logged in', this.userLoggedIn);
     this.checkLogin();
-    this.setDateRange('thisWeek');
-    this.setDateRange('lastWeek');
-    this.setDateRange('twoWeeksAgo');
-    this.setDateRange('threeWeeksAgo');
-    console.log(this.dateRanges, 'Hereeeeeeeee');
-
+    
+    // Initialize date ranges for the dropdown options
+    this.initializeDateRanges();
+    
+    // Explicitly set and load "This Week" data
+    this.loadThisWeekData();
+  }
+  
+  initializeDateRanges(): void {
+    // Calculate all date ranges for the dropdown options
+    // (but don't set them as active ranges)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+  
+    // This Week
+    const thisWeekStart = new Date(today);
+    thisWeekStart.setDate(today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1));
+    const thisWeekEnd = new Date(thisWeekStart);
+    thisWeekEnd.setDate(thisWeekStart.getDate() + 6);
+    this.dateRanges['thisWeek'] = { 
+      from: this.formatDate(thisWeekStart), 
+      to: this.formatDate(thisWeekEnd) 
+    };
+  
+    // Last Week
+    const lastWeekStart = new Date(today);
+    lastWeekStart.setDate(today.getDate() - today.getDay() - 6 + (today.getDay() === 0 ? -6 : 1));
+    const lastWeekEnd = new Date(lastWeekStart);
+    lastWeekEnd.setDate(lastWeekStart.getDate() + 6);
+    this.dateRanges['lastWeek'] = { 
+      from: this.formatDate(lastWeekStart), 
+      to: this.formatDate(lastWeekEnd) 
+    };
+  
+    // Two Weeks Ago
+    const twoWeeksStart = new Date(today);
+    twoWeeksStart.setDate(today.getDate() - today.getDay() - 13 + (today.getDay() === 0 ? -6 : 1));
+    const twoWeeksEnd = new Date(twoWeeksStart);
+    twoWeeksEnd.setDate(twoWeeksStart.getDate() + 6);
+    this.dateRanges['twoWeeksAgo'] = { 
+      from: this.formatDate(twoWeeksStart), 
+      to: this.formatDate(twoWeeksEnd) 
+    };
+  
+    // Three Weeks Ago
+    const threeWeeksStart = new Date(today);
+    threeWeeksStart.setDate(today.getDate() - today.getDay() - 20 + (today.getDay() === 0 ? -6 : 1));
+    const threeWeeksEnd = new Date(threeWeeksStart);
+    threeWeeksEnd.setDate(threeWeeksStart.getDate() + 6);
+    this.dateRanges['threeWeeksAgo'] = { 
+      from: this.formatDate(threeWeeksStart), 
+      to: this.formatDate(threeWeeksEnd) 
+    };
+  }
+  
+  loadThisWeekData(): void {
+    // Set the active date range to "This Week"
+    this.fromDate = this.dateRanges['thisWeek'].from;
+    this.toDate = this.dateRanges['thisWeek'].to;
+    
+    // Load the data
     this.getAllData();
   }
 
+  getCurrentDate(): string {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   getAllData() {
+    this.isLoading = true;
     this.resetData();
 
     this.dataService.getAllData(this.fromDate, this.toDate).subscribe({
       next: (response: any) => {
-        console.log(response);
-
         if (response.data && Array.isArray(response.data)) {
           for (let i = 0; i < response.data.length; i++) {
             const userDetail = response.data[i].userDetails;
@@ -157,10 +213,10 @@ export class HomeComponent implements OnInit {
 
             if (dayKey) {
               this.dayData[dayKey].push(response.data[i]);
-              this.dailyFishCount[dayKey] += quantity; // Add quantity here instead of incrementing by 1
+              this.dailyFishCount[dayKey] += quantity;
 
               if (this.fishCounts[fishType]) {
-                this.fishCounts[fishType][dayKey] += quantity; // Accumulate fish count by quantity
+                this.fishCounts[fishType][dayKey] += quantity;
                 this.fishData[fishType].push(response.data[i]);
               }
             }
@@ -185,11 +241,11 @@ export class HomeComponent implements OnInit {
         }
         this.calculateWeekDays();
         this.getAllFishDataPerDay();
-        console.log('Fish Data:', response);
-        console.log('Fish Data:', this.fishData);
+        this.isLoading = false;
       },
       error: (error: any) => {
-        console.log(error);
+        console.error('Error fetching data:', error);
+        this.isLoading = false;
       },
     });
   }
@@ -215,26 +271,42 @@ export class HomeComponent implements OnInit {
       });
       this.fishData[fish] = [];
     });
+
+    this.fishTypes.forEach((fish) => {
+      this.fishDailyCounts[fish] = [0, 0, 0, 0, 0, 0, 0];
+    });
+
+    this.weeklyFishTotals = {};
+    this.fishTypes.forEach(fish => {
+      this.weeklyFishTotals[fish] = 0;
+    });
+
+    this.YellowfinTuna = [0, 0, 0, 0, 0, 0, 0];
+    this.Dorado = [0, 0, 0, 0, 0, 0, 0];
+    this.Sailfish = [0, 0, 0, 0, 0, 0, 0];
+    this.StripedMarlin = [0, 0, 0, 0, 0, 0, 0];
+    this.BlueMarlin = [0, 0, 0, 0, 0, 0, 0];
+    this.BlackMarlin = [0, 0, 0, 0, 0, 0, 0];
+    this.Wahoo = [0, 0, 0, 0, 0, 0, 0];
+    this.yellowtail = [0, 0, 0, 0, 0, 0, 0];
+    this.Roosterfish = [0, 0, 0, 0, 0, 0, 0];
+    this.Pargo = [0, 0, 0, 0, 0, 0, 0];
+    this.Cabrilla = [0, 0, 0, 0, 0, 0, 0];
+    this.Triggerfish = [0, 0, 0, 0, 0, 0, 0];
+    this.Hauchinango = [0, 0, 0, 0, 0, 0, 0];
+    this.Others = [0, 0, 0, 0, 0, 0, 0];
   }
 
   getDayKey(dayOfWeek: string): string | null {
     switch (dayOfWeek) {
-      case 'MON':
-        return 'mondayData';
-      case 'TUE':
-        return 'tuesdayData';
-      case 'WED':
-        return 'wednesdayData';
-      case 'THU':
-        return 'thursdayData';
-      case 'FRI':
-        return 'fridayData';
-      case 'SAT':
-        return 'saturdayData';
-      case 'SUN':
-        return 'sundayData';
-      default:
-        return null;
+      case 'MON': return 'mondayData';
+      case 'TUE': return 'tuesdayData';
+      case 'WED': return 'wednesdayData';
+      case 'THU': return 'thursdayData';
+      case 'FRI': return 'fridayData';
+      case 'SAT': return 'saturdayData';
+      case 'SUN': return 'sundayData';
+      default: return null;
     }
   }
 
@@ -255,86 +327,74 @@ export class HomeComponent implements OnInit {
       this.isCustomDateSelected = true;
       return;
     }
+    this.isCustomDateSelected = false;
     this.setDateRange(selectedValue);
     this.getAllData();
   }
 
   onCustomDateChange(event: any): void {
-    const customDate = event.target.value; // Get the selected date from the input
-    this.setDateRange('custom-date', customDate); // Pass the selected date to the function
-    this.getAllData(); // Fetch data after the date range is set
-    console.log('Custom date selected:', customDate);
+    const customDate = event.target.value;
+    if (!customDate) return;
+    
+    this.setDateRange('custom-date', customDate);
+    this.getAllData();
   }
+
   setDateRange(range: string, customDate?: string): void {
     const today = new Date();
-    let startOfWeek, endOfWeek;
-    const dayOfWeek = today.getDay();
-    const offset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    today.setHours(0, 0, 0, 0);
 
     switch (range) {
       case 'thisWeek':
-        startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() + offset);
-        endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-        this.fromDate = startOfWeek.toISOString().split('T')[0];
-        this.toDate = endOfWeek.toISOString().split('T')[0];
-        this.dateRanges['thisWeek'] = { from: this.fromDate, to: this.toDate };
+        const thisWeekStart = new Date(today);
+        thisWeekStart.setDate(today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1));
+        const thisWeekEnd = new Date(thisWeekStart);
+        thisWeekEnd.setDate(thisWeekStart.getDate() + 6);
+        this.fromDate = this.formatDate(thisWeekStart);
+        this.toDate = this.formatDate(thisWeekEnd);
         break;
 
       case 'lastWeek':
-        startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() + offset - 7);
-        endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-        this.fromDate = startOfWeek.toISOString().split('T')[0];
-        this.toDate = endOfWeek.toISOString().split('T')[0];
-        this.dateRanges['lastWeek'] = { from: this.fromDate, to: this.toDate };
+        const lastWeekStart = new Date(today);
+        lastWeekStart.setDate(today.getDate() - today.getDay() - 6 + (today.getDay() === 0 ? -6 : 1));
+        const lastWeekEnd = new Date(lastWeekStart);
+        lastWeekEnd.setDate(lastWeekStart.getDate() + 6);
+        this.fromDate = this.formatDate(lastWeekStart);
+        this.toDate = this.formatDate(lastWeekEnd);
         break;
 
       case 'twoWeeksAgo':
-        startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() + offset - 14);
-        endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-        this.fromDate = startOfWeek.toISOString().split('T')[0];
-        this.toDate = endOfWeek.toISOString().split('T')[0];
-        this.dateRanges['twoWeeksAgo'] = {
-          from: this.fromDate,
-          to: this.toDate,
-        };
+        const twoWeeksStart = new Date(today);
+        twoWeeksStart.setDate(today.getDate() - today.getDay() - 13 + (today.getDay() === 0 ? -6 : 1));
+        const twoWeeksEnd = new Date(twoWeeksStart);
+        twoWeeksEnd.setDate(twoWeeksStart.getDate() + 6);
+        this.fromDate = this.formatDate(twoWeeksStart);
+        this.toDate = this.formatDate(twoWeeksEnd);
         break;
 
       case 'threeWeeksAgo':
-        startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() + offset - 21);
-        endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-        this.fromDate = startOfWeek.toISOString().split('T')[0];
-        this.toDate = endOfWeek.toISOString().split('T')[0];
-        this.dateRanges['threeWeeksAgo'] = {
-          from: this.fromDate,
-          to: this.toDate,
-        };
+        const threeWeeksStart = new Date(today);
+        threeWeeksStart.setDate(today.getDate() - today.getDay() - 20 + (today.getDay() === 0 ? -6 : 1));
+        const threeWeeksEnd = new Date(threeWeeksStart);
+        threeWeeksEnd.setDate(threeWeeksStart.getDate() + 6);
+        this.fromDate = this.formatDate(threeWeeksStart);
+        this.toDate = this.formatDate(threeWeeksEnd);
         break;
 
       case 'custom-date':
         if (customDate) {
-          const selectedDate = new Date(customDate); // Convert the string to a Date object
-
-          // Calculate the previous Monday relative to the selected date
-          const dayOfWeek = selectedDate.getDay();
-          const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-          const previousMonday = new Date(selectedDate);
-          previousMonday.setDate(selectedDate.getDate() + diffToMonday);
-
-          // Calculate the upcoming Sunday after the previous Monday
-          const upcomingSunday = new Date(previousMonday);
-          upcomingSunday.setDate(previousMonday.getDate() + 6);
-
-          // Set fromDate and toDate
-          this.fromDate = previousMonday.toISOString().split('T')[0];
-          this.toDate = upcomingSunday.toISOString().split('T')[0];
+          const selectedDate = new Date(customDate);
+          selectedDate.setHours(0, 0, 0, 0);
+          
+          const day = selectedDate.getDay();
+          const diff = selectedDate.getDate() - day + (day === 0 ? -6 : 1);
+          const monday = new Date(selectedDate.setDate(diff));
+          
+          const sunday = new Date(monday);
+          sunday.setDate(monday.getDate() + 6);
+          
+          this.fromDate = this.formatDate(monday);
+          this.toDate = this.formatDate(sunday);
         }
         break;
 
@@ -342,6 +402,19 @@ export class HomeComponent implements OnInit {
         this.fromDate = '';
         this.toDate = '';
     }
+    
+    if (range !== 'custom-date') {
+      this.dateRanges[range] = { from: this.fromDate, to: this.toDate };
+    }
+    
+    this.isCustomDateSelected = range === 'custom-date';
+  }
+
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   initializeFishData() {
@@ -349,6 +422,7 @@ export class HomeComponent implements OnInit {
       fish.totalCount = fish.dailyCounts.reduce((a: any, b: any) => a + b, 0);
     });
   }
+
   getAllFishDataPerDay() {
     this.fishTypes.forEach((fish) => {
       this.fishDailyCounts[fish] = [0, 0, 0, 0, 0, 0, 0];
@@ -357,7 +431,7 @@ export class HomeComponent implements OnInit {
     Object.keys(this.dayData).forEach((dayKey) => {
       this.dayData[dayKey].forEach((data) => {
         const fishType = data.species;
-        const quantity = data.quantity || 0; // Assuming 'quantity' represents the fish count
+        const quantity = data.quantity || 0;
         const dayIndex = this.getDayIndex(dayKey);
 
         if (this.fishDailyCounts[fishType] && dayIndex !== -1) {
@@ -388,7 +462,6 @@ export class HomeComponent implements OnInit {
     this.Hauchinango = this.fishDailyCounts['Hauchinango'];
     this.Others = this.fishDailyCounts['Others'];
 
-    // Calculate cumulative arrays for each fish type
     this.YellowfinTunaCumulative = this.calculateCumulative(this.YellowfinTuna);
     this.DoradoCumulative = this.calculateCumulative(this.Dorado);
     this.SailfishCumulative = this.calculateCumulative(this.Sailfish);
@@ -407,22 +480,14 @@ export class HomeComponent implements OnInit {
 
   getDayIndex(dayKey: string): number {
     switch (dayKey) {
-      case 'mondayData':
-        return 0;
-      case 'tuesdayData':
-        return 1;
-      case 'wednesdayData':
-        return 2;
-      case 'thursdayData':
-        return 3;
-      case 'fridayData':
-        return 4;
-      case 'saturdayData':
-        return 5;
-      case 'sundayData':
-        return 6;
-      default:
-        return -1;
+      case 'mondayData': return 0;
+      case 'tuesdayData': return 1;
+      case 'wednesdayData': return 2;
+      case 'thursdayData': return 3;
+      case 'fridayData': return 4;
+      case 'saturdayData': return 5;
+      case 'sundayData': return 6;
+      default: return -1;
     }
   }
 
@@ -452,10 +517,6 @@ export class HomeComponent implements OnInit {
   }
 
   checkLogin() {
-    if (this.userLoggedIn) {
-      this.userLoginIn = true;
-    } else {
-      this.userLoginIn = false;
-    }
+    this.userLoginIn = !!this.userLoggedIn;
   }
 }

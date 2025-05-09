@@ -26,13 +26,34 @@ export class DataComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.setDateRange('thisWeek');
-    this.setDateRange('lastWeek');
-    this.setDateRange('twoWeeksAgo');
-    this.setDateRange('threeWeeksAgo');
-    this.getData();
+    this.initializeDateRanges(); // First initialize all date ranges
+    this.loadThisWeekData(); // Then explicitly load this week's data
     this.checkAdmin();
   }
+  
+  initializeDateRanges(): void {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+  
+    // Calculate all date ranges for dropdown options
+    ['thisWeek', 'lastWeek', 'twoWeeksAgo', 'threeWeeksAgo'].forEach((range, index) => {
+      const start = new Date(today);
+      start.setDate(today.getDate() - today.getDay() - (index * 7) + (today.getDay() === 0 ? -6 : 1));
+      const end = new Date(start);
+      end.setDate(start.getDate() + 6);
+      this.dateRanges[range] = {
+        from: this.formatDate(start),
+        to: this.formatDate(end)
+      };
+    });
+  }
+  
+  loadThisWeekData(): void {
+    this.fromDate = this.dateRanges['thisWeek'].from;
+    this.toDate = this.dateRanges['thisWeek'].to;
+    this.getData();
+  }
+
   getCurrentDate(): string {
     const today = new Date();
     const year = today.getFullYear();
@@ -68,95 +89,98 @@ export class DataComponent implements OnInit {
       this.isCustomDateSelected = true;
       return;
     }
-    this.setDateRange(selectedValue);
+    this.isCustomDateSelected = false;
+    this.fromDate = this.dateRanges[selectedValue].from;
+    this.toDate = this.dateRanges[selectedValue].to;
     this.getData();
   }
 
-  setDateRange(range: string, customDate?: string): void {
-    const today = new Date();
-    let startOfWeek, endOfWeek;
-    const dayOfWeek = today.getDay();
-    const offset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+// Update your setDateRange function like this:
+setDateRange(range: string, customDate?: string): void {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Normalize time to midnight
 
-    switch (range) {
-      case 'thisWeek':
-        startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() + offset);
-        endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-        this.fromDate = startOfWeek.toISOString().split('T')[0];
-        this.toDate = endOfWeek.toISOString().split('T')[0];
-        this.dateRanges['thisWeek'] = { from: this.fromDate, to: this.toDate };
-        break;
+  switch (range) {
+    case 'thisWeek':
+      const thisWeekStart = new Date(today);
+      thisWeekStart.setDate(today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1)); // Always get Monday
+      const thisWeekEnd = new Date(thisWeekStart);
+      thisWeekEnd.setDate(thisWeekStart.getDate() + 6);
+      this.fromDate = this.formatDate(thisWeekStart);
+      this.toDate = this.formatDate(thisWeekEnd);
+      this.dateRanges['thisWeek'] = { from: this.fromDate, to: this.toDate };
+      break;
 
-      case 'lastWeek':
-        startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() + offset - 7);
-        endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-        this.fromDate = startOfWeek.toISOString().split('T')[0];
-        this.toDate = endOfWeek.toISOString().split('T')[0];
-        this.dateRanges['lastWeek'] = { from: this.fromDate, to: this.toDate };
-        break;
+    case 'lastWeek':
+      const lastWeekStart = new Date(today);
+      lastWeekStart.setDate(today.getDate() - today.getDay() - 6 + (today.getDay() === 0 ? -6 : 1));
+      const lastWeekEnd = new Date(lastWeekStart);
+      lastWeekEnd.setDate(lastWeekStart.getDate() + 6);
+      this.fromDate = this.formatDate(lastWeekStart);
+      this.toDate = this.formatDate(lastWeekEnd);
+      this.dateRanges['lastWeek'] = { from: this.fromDate, to: this.toDate };
+      break;
 
-      case 'twoWeeksAgo':
-        startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() + offset - 14);
-        endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-        this.fromDate = startOfWeek.toISOString().split('T')[0];
-        this.toDate = endOfWeek.toISOString().split('T')[0];
-        this.dateRanges['twoWeeksAgo'] = {
-          from: this.fromDate,
-          to: this.toDate,
-        };
-        break;
+    case 'twoWeeksAgo':
+      const twoWeeksStart = new Date(today);
+      twoWeeksStart.setDate(today.getDate() - today.getDay() - 13 + (today.getDay() === 0 ? -6 : 1));
+      const twoWeeksEnd = new Date(twoWeeksStart);
+      twoWeeksEnd.setDate(twoWeeksStart.getDate() + 6);
+      this.fromDate = this.formatDate(twoWeeksStart);
+      this.toDate = this.formatDate(twoWeeksEnd);
+      this.dateRanges['twoWeeksAgo'] = { from: this.fromDate, to: this.toDate };
+      break;
 
-      case 'threeWeeksAgo':
-        startOfWeek = new Date(today);
-        startOfWeek.setDate(today.getDate() + offset - 21);
-        endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-        this.fromDate = startOfWeek.toISOString().split('T')[0];
-        this.toDate = endOfWeek.toISOString().split('T')[0];
-        this.dateRanges['threeWeeksAgo'] = {
-          from: this.fromDate,
-          to: this.toDate,
-        };
-        break;
+    case 'threeWeeksAgo':
+      const threeWeeksStart = new Date(today);
+      threeWeeksStart.setDate(today.getDate() - today.getDay() - 20 + (today.getDay() === 0 ? -6 : 1));
+      const threeWeeksEnd = new Date(threeWeeksStart);
+      threeWeeksEnd.setDate(threeWeeksStart.getDate() + 6);
+      this.fromDate = this.formatDate(threeWeeksStart);
+      this.toDate = this.formatDate(threeWeeksEnd);
+      this.dateRanges['threeWeeksAgo'] = { from: this.fromDate, to: this.toDate };
+      break;
 
-      case 'custom-date':
-        if (customDate) {
-          const selectedDate = new Date(customDate); // Convert the string to a Date object
+    case 'custom-date':
+      if (customDate) {
+        const selectedDate = new Date(customDate);
+        selectedDate.setHours(0, 0, 0, 0);
+        
+        // Get the Monday of the selected week
+        const day = selectedDate.getDay();
+        const diff = selectedDate.getDate() - day + (day === 0 ? -6 : 1);
+        const monday = new Date(selectedDate.setDate(diff));
+        
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+        
+        this.fromDate = this.formatDate(monday);
+        this.toDate = this.formatDate(sunday);
+      }
+      break;
 
-          // Calculate the previous Monday relative to the selected date
-          const dayOfWeek = selectedDate.getDay();
-          const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-          const previousMonday = new Date(selectedDate);
-          previousMonday.setDate(selectedDate.getDate() + diffToMonday);
-
-          // Calculate the upcoming Sunday after the previous Monday
-          const upcomingSunday = new Date(previousMonday);
-          upcomingSunday.setDate(previousMonday.getDate() + 6);
-
-          // Set fromDate and toDate
-          this.fromDate = previousMonday.toISOString().split('T')[0];
-          this.toDate = upcomingSunday.toISOString().split('T')[0];
-        }
-        break;
-
-      default:
-        this.fromDate = '';
-        this.toDate = '';
-    }
+    default:
+      this.fromDate = '';
+      this.toDate = '';
   }
+}
 
-  onCustomDateChange(event: any): void {
-    const customDate = event.target.value; // Get the selected date from the input
-    this.setDateRange('custom-date', customDate); // Pass the selected date to the function
-    this.getData(); // Fetch data after the date range is set
-    console.log('Custom date selected:', customDate);
-  }
+// Add this helper function to format dates consistently
+private formatDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+} 
+
+onCustomDateChange(event: any): void {
+  const customDate = event.target.value;
+  if (!customDate) return;
+  
+  this.setDateRange('custom-date', customDate);
+  this.getData();
+}
+
   addData() {
     this.router.navigate(['/add-data']);
   }
