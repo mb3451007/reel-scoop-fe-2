@@ -121,66 +121,36 @@ export class HomeComponent implements OnInit {
       this.userLoggedIn = JSON.parse(user);
     }
     this.checkLogin();
-    
+
     // Initialize date ranges for the dropdown options
     this.initializeDateRanges();
-    
+
     // Explicitly set and load "This Week" data
     this.loadThisWeekData();
   }
-  
+
   initializeDateRanges(): void {
-    // Calculate all date ranges for the dropdown options
-    // (but don't set them as active ranges)
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-  
-    // This Week
-    const thisWeekStart = new Date(today);
-    thisWeekStart.setDate(today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1));
-    const thisWeekEnd = new Date(thisWeekStart);
-    thisWeekEnd.setDate(thisWeekStart.getDate() + 6);
-    this.dateRanges['thisWeek'] = { 
-      from: this.formatDate(thisWeekStart), 
-      to: this.formatDate(thisWeekEnd) 
-    };
-  
-    // Last Week
-    const lastWeekStart = new Date(today);
-    lastWeekStart.setDate(today.getDate() - today.getDay() - 6 + (today.getDay() === 0 ? -6 : 1));
-    const lastWeekEnd = new Date(lastWeekStart);
-    lastWeekEnd.setDate(lastWeekStart.getDate() + 6);
-    this.dateRanges['lastWeek'] = { 
-      from: this.formatDate(lastWeekStart), 
-      to: this.formatDate(lastWeekEnd) 
-    };
-  
-    // Two Weeks Ago
-    const twoWeeksStart = new Date(today);
-    twoWeeksStart.setDate(today.getDate() - today.getDay() - 13 + (today.getDay() === 0 ? -6 : 1));
-    const twoWeeksEnd = new Date(twoWeeksStart);
-    twoWeeksEnd.setDate(twoWeeksStart.getDate() + 6);
-    this.dateRanges['twoWeeksAgo'] = { 
-      from: this.formatDate(twoWeeksStart), 
-      to: this.formatDate(twoWeeksEnd) 
-    };
-  
-    // Three Weeks Ago
-    const threeWeeksStart = new Date(today);
-    threeWeeksStart.setDate(today.getDate() - today.getDay() - 20 + (today.getDay() === 0 ? -6 : 1));
-    const threeWeeksEnd = new Date(threeWeeksStart);
-    threeWeeksEnd.setDate(threeWeeksStart.getDate() + 6);
-    this.dateRanges['threeWeeksAgo'] = { 
-      from: this.formatDate(threeWeeksStart), 
-      to: this.formatDate(threeWeeksEnd) 
-    };
+    ['thisWeek', 'lastWeek', 'twoWeeksAgo', 'threeWeeksAgo'].forEach((range, index) => {
+      const start = new Date(today);
+      start.setDate(today.getDate() - today.getDay() - (index * 7) + (today.getDay() === 0 ? -6 : 1));
+      const end = new Date(start);
+      end.setDate(start.getDate() + 6);
+      this.dateRanges[range] = {
+        from: this.formatDate(start),
+        to: this.formatDate(end)
+      };
+    });
+
   }
-  
+
+
   loadThisWeekData(): void {
     // Set the active date range to "This Week"
     this.fromDate = this.dateRanges['thisWeek'].from;
     this.toDate = this.dateRanges['thisWeek'].to;
-    
+
     // Load the data
     this.getAllData();
   }
@@ -335,7 +305,7 @@ export class HomeComponent implements OnInit {
   onCustomDateChange(event: any): void {
     const customDate = event.target.value;
     if (!customDate) return;
-    
+
     this.setDateRange('custom-date', customDate);
     this.getAllData();
   }
@@ -385,14 +355,14 @@ export class HomeComponent implements OnInit {
         if (customDate) {
           const selectedDate = new Date(customDate);
           selectedDate.setHours(0, 0, 0, 0);
-          
+
           const day = selectedDate.getDay();
           const diff = selectedDate.getDate() - day + (day === 0 ? -6 : 1);
           const monday = new Date(selectedDate.setDate(diff));
-          
+
           const sunday = new Date(monday);
           sunday.setDate(monday.getDate() + 6);
-          
+
           this.fromDate = this.formatDate(monday);
           this.toDate = this.formatDate(sunday);
         }
@@ -402,11 +372,11 @@ export class HomeComponent implements OnInit {
         this.fromDate = '';
         this.toDate = '';
     }
-    
+
     if (range !== 'custom-date') {
       this.dateRanges[range] = { from: this.fromDate, to: this.toDate };
     }
-    
+
     this.isCustomDateSelected = range === 'custom-date';
   }
 
